@@ -115,7 +115,7 @@ kbd.ar{font-size:1.15cqw}
 <div id=boot class="scr on"><div class=logo><h1>Yaksha <span>Kombat</span></h1></div><div class=loadbar><i id=bootBar></i></div><p id=bootTxt>යක්ෂයින් කැඳවමින්…</p></div>
 <div id=title class=scr><div class=vign></div>
  <div class=tpanel><div class=logo><h1>Yaksha <span>Kombat</span></h1><p class=tag>ලංකාදීපයේ යක්ෂයෝ</p></div>
- <nav class=menu><button data-a=play>සටන අරඹන්න</button><button data-a=lan>LAN සටන</button><button data-a=controls>පාලන යතුරු</button><button data-a=credits>ගෞරව නාමාවලිය</button><button data-a=diff>දුෂ්කරතාව: මධ්‍යම</button><button data-a=sound>ශබ්දය: සක්‍රීය</button></nav></div>
+ <nav class=menu><button data-a=play>සටන අරඹන්න</button><button data-a=lan>මිතුරා සමඟ සටන</button><button data-a=controls>පාලන යතුරු</button><button data-a=credits>ගෞරව නාමාවලිය</button><button data-a=diff>දුෂ්කරතාව: මධ්‍යම</button><button data-a=sound>ශබ්දය: සක්‍රීය</button></nav></div>
  <div class=dev>Developed by <b>Ashenbgy</b></div>
  <div class=hint><kbd class=ar>↑</kbd><kbd class=ar>↓</kbd><span>තෝරන්න</span><kbd>Enter</kbd><span>තහවුරු කරන්න</span></div></div>
 <div id=select class=scr><div class=vign></div><div class=stitle>ඔබේ සටන්කරුවා තෝරන්න<small>වට තුනෙන් දෙකක් · පරිගණකයට එරෙහිව</small></div><div id=sLoad>කැඳවමින්…</div>
@@ -133,7 +133,7 @@ kbd.ar{font-size:1.15cqw}
  <div id=combo><b></b><small></small></div>
  <div id=fprompt><span><kbd>J</kbd>බිලි</span><span><kbd>I</kbd>මහා බිලි</span><span><kbd>K</kbd>ශාන්තිය</span><i id=fbar></i></div>
  <div class="hint min"><kbd>Esc</kbd><span>විරාමය</span><kbd>M</kbd><span>ශබ්දය</span></div></div>
-<div id=lan class="scr ov"><div class=panel><h2>LAN සටන</h2><p id=lanMsg class=lanmsg></p><div id=lanCode class=lancode></div>
+<div id=lan class="scr ov"><div class=panel><h2>මිතුරා සමඟ සටන</h2><p id=lanMsg class=lanmsg></p><div id=lanCode class=lancode></div>
  <input id=lanIn maxlength=4 inputmode=numeric autocomplete=off placeholder="කාමර අංකය">
  <nav class=menu><button data-a=lanhost>සටනක් සාදන්න</button><button data-a=lanjoin>සටනකට එක්වන්න</button><button data-a=lanback>ආපසු</button></nav></div></div>
 <div id=pause class="scr ov"><div class=panel><h2>විරාමය</h2><div id=pauseMoves></div><nav class=menu><button data-a=resume>නැවත අරඹන්න</button><button data-a=controls>පාලන යතුරු</button><button data-a=sound>ශබ්දය: සක්‍රීය</button><button data-a=select>සටන්කරුවා තෝරන්න</button><button data-a=title>ප්‍රධාන මෙනුව</button></nav></div></div>
@@ -158,6 +158,7 @@ kbd.ar{font-size:1.15cqw}
  <div class=tatk><button class=tp data-k=j>👊</button><button class=tp data-k=i>✊</button><button class=ts data-k=o>⚡</button><button class=tk data-k=k>🦶</button><button class=tk data-k=l>💥</button><button class=tb data-k=" ">🛡</button><button class=ts style="grid-column:span 3;height:4cqw;font-size:1.1cqw;border-radius:1cqw;margin-top:.4cqw" data-k=shift>🌀 පෙරළීම (Roll)</button></div>
 </div>
 </div></div>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script type=importmap>{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type=module>
 import * as THREE from "three";
@@ -296,19 +297,19 @@ function separate(a,b){if(Math.abs(a.y-b.y)>95)return;const need=minSep(a,b),d=M
  for(const[f,o]of[[l,r],[r,l]])if(Math.sign(f.vx)==Math.sign(o.x-f.x))f.vx=0}
 function fin(n){const w=A.win?A:B,l=w==A?B:A;S="fatal";$("#fprompt").classList.remove("on");netEv("fp",false);banner("");
  w.atk=l.atk=null;w.fx=0;P=[];w.vx=l.vx=0;w.face=l.x>w.x?1:-1;l.face=-w.face;
- if(n==0)w.x=Math.max(30,Math.min(770,l.x-w.face*(minSep(w,l)+8)));
- const ban=n==0?rnd(["grab","sthrow","sthrow2","backflip"]):0;
- FX={n,w,l,t:0,hit:n==0?impactF(ban)+4:n==1?impactF("fire")+22:impactF("cast2"),end:n<0?200:230};
+  const ban=n==0?rnd(["grab","sthrow","sthrow2","backflip"]):0;
+ if(n==0){const d=(ANIM.reach[ban]||.5)*(w.m?.hipH||1)*60+bw(l)*.3;w.x=Math.max(30,Math.min(770,l.x-w.face*d));if(Math.abs(l.x-w.x)<d-1)l.x=Math.max(30,Math.min(770,w.x+w.face*d))}
+ FX={n,w,l,ban,t:0,hit:n==0?impactF(ban)+4:n==1?impactF("fire")+22:impactF("cast2"),end:n<0?200:230};
  const wa=n==0?ban:n==1?"fire":"cast2";w.cin={k:wa,ts:TS[wa],off:ANIM.off[wa]};sfx("growl",voice(w),.8);if(n)sfx("cast")}
 function stepFin(){const{n,w,l}=FX,t=++FX.t;
  if(n==1&&t==FX.hit-22){P.push({x:w.x+w.face*40,y:w.y-60,vx:(l.x-w.x)/22,dmg:0,f:w,r:46,fx:1})}
  if(t==FX.hit){const hx=X(l.x),hy=Y(l.y)+1.1;
   if(n<0){sfx("bell");l.daze=0;l.hp=1;l.cin=null;sparks(hx,hy-.6,160,"gold",1.6);fx={x:l.x,c:0xffd070,t:0};banner("ශාන්තිය",`${SIN[w.i]} සමාව දෙයි`,"pop")}
   else{P=[];sfx("boom");sfx("hit",30,false);sfx("growl",voice(l),1.2);shake=.6;slowMo=.25;setTimeout(()=>slowMo=1,1400);
-   sparks(hx,hy,260,true,2.6);sparks(hx,hy,90,false,2);if(n==1){sparks(hx,hy,200,false,3);l.vy=-13;l.vx=w.face*7}else l.vx=w.face*2;
+   sparks(hx,hy,260,true,2.6);sparks(hx,hy,90,false,2);if(n==1){sparks(hx,hy,200,false,3);l.vy=-13;l.vx=w.face*7}else if(/sthrow/.test(FX.ban)){l.vy=-12;l.vx=-w.face*Math.min(14,(Math.abs(l.x-w.x)+minSep(w,l)+30)/12.5)}else if(FX.ban=="backflip"){l.vy=-12.5;l.vx=w.face*3.5}else l.vx=w.face*1;
    l.daze=0;l.cin=n==1?{k:"flydeath",ts:1.2,off:.15}:{k:"knock",ts:1.3,off:KN_IN};fx={x:l.x,c:0xff1010,t:0};banner(n?"මහා බිලි":"බිලි",w.d[6][n],"pop red")}}
  if(t>FX.hit&&n>=0&&t%9==0&&t<FX.hit+90)sparks(X(l.x),Y(l.y)+.3,12,true,.6);
- separate(w,l);
+ if(t>FX.hit&&l.y>=GY&&w.y>=GY)separate(w,l);
  for(const f of[w,l]){f.x=Math.max(30,Math.min(770,f.x+f.vx));f.vx*=.92;f.y+=f.vy;f.vy+=.6;if(f.y>=GY){f.y=GY;f.vy=0}}
  P=P.filter(p=>{p.x+=p.vx;return Math.abs(p.x-l.x)>20});
  if(t>=FX.end){S="over";tm=1;w.cin=null}}
@@ -582,7 +583,7 @@ function body(i,ci){
  // attachment slot on a bone, oriented & scaled like the character frame at bind pose
  const slot=(n,x=0,y=0,z=0)=>{const bn=bone(n),g=new THREE.Group();bn.add(g);g.quaternion.copy(bn.getWorldQuaternion(new THREE.Quaternion())).invert();
   g.scale.setScalar(Gs/bn.getWorldScale(V()).y);return piv(g,x,y,z)};
- {const la=bone("LeftArm"),ra=bone("RightArm");m.w=la&&ra?Math.max(44,Math.min(86,la.getWorldPosition(V()).distanceTo(ra.getWorldPosition(V()))*60*2.4)):55}
+ m.hipH=bone("Hips").getWorldPosition(V()).y;{const la=bone("LeftArm"),ra=bone("RightArm");m.w=la&&ra?Math.max(44,Math.min(86,la.getWorldPosition(V()).distanceTo(ra.getWorldPosition(V()))*60*2.4)):55}
  const hipY=bone("Hips").getWorldPosition(V()).y/Gs,hip=slot("Hips"),ch=slot("Spine"),hd=slot("Head"),RH=slot("RightHand",-.08,-.02,0),LH=slot("LeftHand",.08,-.02,0);
  // mocap: a hidden Mixamo skeleton plays the clips; each bone's world rotation is copied onto this body (rest-pose corrected)
  const sk0=ANIM.skel.clone();G.add(sk0);sk0.updateMatrixWorld(true);sk0.scale.setScalar(bone("Hips").getWorldPosition(V()).y/sk0.getObjectByName("mixamorigHips").getWorldPosition(V()).y);sk0.updateMatrixWorld(true);
@@ -664,11 +665,11 @@ function drop(m){scene.remove(m.root);m.root.traverse(o=>{if(!o.isSkinnedMesh&&!
 function normalizeHips(){const rest=ANIM.skel.getObjectByName("mixamorigHips").position.y;
  for(const[k,c]of Object.entries(ANIM.clips)){const r=ANIM.rest[k],hp=c.tracks.find(t=>t.name=="mixamorigHips.position");if(!hp||!r||Math.abs(r/rest-1)<.1)continue;
   const s=rest/r,v=hp.values;for(let i=0;i<v.length;i++)v[i]*=s}}
-function measureImpacts(){ANIM.hit={};ANIM.off={};const sk=ANIM.skel.clone(),mx=new THREE.AnimationMixer(sk),hips=sk.getObjectByName("mixamorigHips"),v=V(),hv=V();
+function measureImpacts(){ANIM.hit={};ANIM.off={};ANIM.reach={};const rest=ANIM.skel.getObjectByName("mixamorigHips").position.y;const sk=ANIM.skel.clone(),mx=new THREE.AnimationMixer(sk),hips=sk.getObjectByName("mixamorigHips"),v=V(),hv=V();
  for(const[k,limbs]of[["punch","Hand"],["punch2","Hand"],["kick","Foot"],["kick2","Foot"],["fire","Hand"],["cast","Hand"],["grab","Hand"],["fkick","Foot"],["knee","Hand"],["sthrow","Hand"],["dkick","Foot"],["slide","Foot"],["headbutt","Head"],["crescent","Foot"],["kicking","Foot"],["kneek","Foot"],["sweep","Foot"],["martelo","Foot"],["quad","Hand"],["stab","Hand"],["uppercut","Hand"],["backflip","Hand"],["sthrow2","Hand"],["cast2","Hand"]]){
   const c=ANIM.clips[k],act=mx.clipAction(c);act.play();const bs=(limbs=="Head"?[""]:["Left","Right"]).map(sd=>sk.getObjectByName("mixamorig"+sd+limbs)).filter(Boolean);let best=-1e9,bt=.3;
-  for(let t=0;t<=c.duration;t+=1/60){mx.setTime(t);sk.updateMatrixWorld(true);hips.getWorldPosition(hv);for(const b of bs){b.getWorldPosition(v);const r=v.z-hv.z+(limbs=="Foot"?(v.y-hv.y)*.5:0);if(r>best){best=r;bt=t}}}
-  act.stop();ANIM.hit[k]=IMP[k]??bt;ANIM.off[k]=Math.max(0,ANIM.hit[k]-WIND[k])}}  // shoulder throw: impact is the landing slam
+  const fwd=[];for(let t=0;t<=c.duration;t+=1/60){mx.setTime(t);sk.updateMatrixWorld(true);hips.getWorldPosition(hv);let f=-1e9;for(const b of bs){b.getWorldPosition(v);f=Math.max(f,v.z-hv.z);const r=v.z-hv.z+(limbs=="Foot"?(v.y-hv.y)*.5:0);if(r>best){best=r;bt=t}}fwd.push(f)}
+  act.stop();ANIM.hit[k]=IMP[k]??bt;ANIM.off[k]=Math.max(0,ANIM.hit[k]-WIND[k]);ANIM.reach[k]=Math.max(.15,fwd[Math.min(fwd.length-1,Math.round(ANIM.hit[k]*60))]/rest)}}  // shoulder throw: impact is the landing slam
 const ANIM={clips:{},rest:{}},AF={idle:"Fighting Idle",walk:"Standing Walk Forward",back:"Standing Walk Back",punch:"Cross Punch",punch2:"Hook Punch",kick:"Mma Kick",kick2:"Roundhouse Kick",
  block:"Center Block",jump:"Jump",hit:"Head Hit",death:"Dying",win:"Victory Idle",cast:"Spell Casting",fire:"Fireball",roll:"Falling To Roll",
  dizzy:"Injured Stumble Idle",knock:"Knocked Out",getup:"Getting Up",hitbody:"Stomach Hit",grab:"Grab And Slam",taunt:"Taunt",fkick:"Flying Kick",
@@ -736,7 +737,7 @@ function render(){const t=performance.now()/1000,raw=t-last/1000,dt=paused?0:Mat
   for(const p of P){p.m.position.set(X(p.x),Y(p.y),0);p.m.rotation.y+=.3}
   const mx=(X(A.x)+X(B.x))/2,dz=Math.abs(X(A.x)-X(B.x));shake*=.85;
   if(S=="fatal"&&FX){const lx=X(FX.l.x)*.7+X(FX.w.x)*.3;cam.position.lerp(new THREE.Vector3(lx,1.5,5.4),.05);cam.lookAt(lx,1,0)}else cam.position.lerp(new THREE.Vector3(mx*.85,1.8,8+dz*.5),.1);cam.position.x+=(Math.random()-.5)*shake;cam.position.y+=(Math.random()-.5)*shake;if(S!="fatal")cam.lookAt(mx*.85,1.15,0)}
- if(fx){fx.t++;fxLight.color.set(fx.c);fxLight.position.set(X(fx.x),1,.8);fxLight.intensity=40*Math.abs(Math.sin(fx.t*.1))}else fxLight.intensity=0;
+ if(fx){fx.t++;fxLight.color.set(fx.c);fxLight.position.set(X(fx.x),1,.8);fxLight.intensity=14*Math.abs(Math.sin(fx.t*.1))}else fxLight.intensity=0;
  comp.render()}
 
 // ---------- AUDIO: procedural Sri Lankan devil-dance ensemble ----------
@@ -864,25 +865,42 @@ function setSound(on){AU.on=on;try{localStorage.setItem("yk-sound",on?"1":"0")}c
  $$("[data-a=sound]").forEach(b=>b.textContent="ශබ්දය: "+(on?"සක්‍රීය":"අක්‍රීය"))}
 addEventListener("pointerdown",auInit);
 
-// ---------- LAN multiplayer (host-authoritative; relay = server.py /ws) ----------
+// ---------- multiplayer: LAN / online (host-authoritative over WebRTC) ----------
 // host simulates both fighters (guest = fighter B driven by relayed keys) and streams state every frame; guest only renders.
 const RK={};
-function netSend(o){if(NET?.ws?.readyState==1)NET.ws.send(JSON.stringify(o))}
+// transport: WebRTC data channel via PeerJS (free public broker only for the handshake; game traffic goes browser-to-browser,
+// staying inside the local network when both players are on the same Wi-Fi)
+const PEER_PREFIX="yaksha-kombat-v1-";
+function netSend(o){if(NET?.conn?.open)NET.conn.send(o)}
+// heartbeat: an abruptly closed browser can take ~30 s for WebRTC to notice; treat 5 s of silence as a disconnect
+setInterval(()=>{if(!NET?.on)return;netSend({t:"hb"});if(performance.now()-NET.last>5000)netGone()},1000);
+function netWire(conn){NET.conn=conn;NET.last=performance.now();conn.on("data",m=>{if(NET)NET.last=performance.now();if(m.t!="hb")netMsg(m)});conn.on("close",()=>{if(NET?.conn===conn)netGone()});conn.on("error",()=>{if(NET?.conn===conn)netGone()})}
+function netGone(){const wasOn=NET?.on;netClose();if(wasOn)netLost();else lanUI("msg","සම්බන්ධතාවය අසාර්ථක විය. නැවත උත්සාහ කරන්න.")}
+function netPeer(id){if(!window.Peer){lanUI("msg","බහු-ක්‍රීඩක පුස්තකාලය පූරණය නොවීය. අන්තර්ජාල සම්බන්ධතාවය පරීක්ෂා කරන්න.");return null}
+ netClose();const peer=id?new Peer(id,{debug:0}):new Peer({debug:0});NET={peer,conn:null,role:null,on:false};
+ peer.on("error",e=>{if(NET?.peer!==peer)return;
+  if(e.type=="unavailable-id")return netHost();                         // room code taken: pick another
+  if(e.type=="peer-unavailable"){netClose();return lanUI("join","එම අංකයෙන් සටනක් හමු නොවීය. අංකය පරීක්ෂා කරන්න.")}
+  if(["network","server-error","socket-error","socket-closed","browser-incompatible"].includes(e.type)&&!NET.on){netClose();return lanUI("msg","සම්බන්ධ වීමට අන්තර්ජාලය අවශ්‍යයි (සම්බන්ධ වීමේ පියවර සඳහා පමණි). සම්බන්ධතාවය පරීක්ෂා කර නැවත උත්සාහ කරන්න.")}});
+ return peer}
+function netHost(){const code=String(1000+Math.random()*9000|0),peer=netPeer(PEER_PREFIX+code);if(!peer)return;lanUI("msg","සටන සකසමින්…");
+ peer.on("open",()=>{NET.code=code;netMsg({t:"room",code})});
+ peer.on("connection",conn=>{if(NET?.conn){conn.on("open",()=>conn.close());return}
+  conn.on("open",()=>{netWire(conn);netMsg({t:"paired",role:"host"})})})}
+function netJoin(code){const peer=netPeer();if(!peer)return;lanUI("msg","සම්බන්ධ වෙමින්…");
+ peer.on("open",()=>{const conn=peer.connect(PEER_PREFIX+code,{serialization:"json"});conn.on("open",()=>{netWire(conn);netMsg({t:"paired",role:"guest"})})})}
 function netEv(n,...a){if(NET?.role=="host"&&NET.on)(NET.ev||=[]).push([n,...a])}
 function lanUI(stage,msg=""){$("#lanMsg").textContent=msg;$("#lanCode").textContent=stage=="hosting"?NET.code:"";$("#lanIn").classList.toggle("on",stage=="join");
  const show={choose:["lanhost","lanjoin","lanback"],hosting:["lanback"],join:["lanjoin","lanback"],msg:["lanback"]}[stage];
  $$("#lan .menu button").forEach(b=>b.style.display=show.includes(b.dataset.a)?"":"none");if(stage=="join")setTimeout(()=>$("#lanIn").focus(),50)}
-function netOpen(){netClose();return new Promise(res=>{const ws=new WebSocket(`${location.protocol=="https:"?"wss":"ws"}://${location.host}/ws`);NET={ws,role:null,on:false};
- ws.onopen=()=>res(true);ws.onerror=()=>{res(false)};ws.onmessage=e=>netMsg(JSON.parse(e.data));
- ws.onclose=()=>{if(NET?.ws===ws){const wasOn=NET.on;NET=null;if(wasOn)netLost()}}})}
-function netClose(){if(NET){const ws=NET.ws;NET=null;try{ws.close()}catch(e){}}}
+function netClose(){if(NET){const n=NET;NET=null;try{n.conn?.close()}catch(e){}try{n.peer?.destroy()}catch(e){}}}
 function netLost(){if(A){for(const f of[A,B])drop(f.m);A=B=null;P=[]}paused=false;toTitle();overlay("lan");lanUI("msg","ප්‍රතිවාදියා සම්බන්ධතාවයෙන් ඉවත් විය.")}
 function lanAct(a){
- if(a=="lan"){overlay("lan");lanUI("choose","එකම Wi-Fi / LAN ජාලයේ ඇති මිතුරෙකු සමඟ සටන් කරන්න.");return 1}
- if(a=="lanhost"){netOpen().then(ok=>{if(!ok)return lanUI("msg","LAN සේවාදායකය හමු නොවීය. ක්‍රීඩාව  python3 server.py  මගින් විවෘත කරන්න.");netSend({t:"host"})});return 1}
+ if(a=="lan"){overlay("lan");lanUI("choose","මිතුරෙකු සමඟ සටන් කරන්න — එකම Wi-Fi / LAN ජාලයේ හෝ අන්තර්ජාලය හරහා. දෙදෙනාම මෙම ක්‍රීඩාව විවෘත කළ යුතුය.");return 1}
+ if(a=="lanhost"){netHost();return 1}
  if(a=="lanjoin"){if(!$("#lanIn").classList.contains("on"))return lanUI("join","සටන සාදන්නාගේ තිරයේ ඇති අංක 4 ඇතුළත් කරන්න."),1;
   const code=$("#lanIn").value.trim();if(!/^\d{4}$/.test(code)){lanUI("join","අංක 4ක් ඇතුළත් කරන්න.");return 1}
-  netOpen().then(ok=>{if(!ok)return lanUI("msg","LAN සේවාදායකය හමු නොවීය. ක්‍රීඩාව  python3 server.py  මගින් විවෘත කරන්න.");netSend({t:"join",code})});return 1}
+  netJoin(code);return 1}
  if(a=="lanback"){netClose();overlay(null);return 1}
  if(!NET?.on)return 0;
  if(a=="title"){netClose();if(A){for(const f of[A,B])drop(f.m);A=B=null;P=[]}toTitle();return 1}
@@ -909,19 +927,20 @@ function netApply(){const st=NET?.st;if(!st||!A)return;NET.st=null;
  st.fs.forEach((o,j)=>{const f=j?B:A,fx0=o.fx;Object.assign(f,o);f.fx=fx0||0;f.max=f.max||R[f.i][2]});
  FX=st.FX?{n:st.FX.n,l:st.FX.l?B:A,w:st.FX.l?A:B}:null;
  const old=new Map(P.map(p=>[p.id,p]));P=st.ps.map(([id,x,y,r,o])=>{const p=old.get(id)||{id,f:o?B:A,r};p.x=x;p.y=y;return p});
- for(const[n,...a]of st.ev){if(n=="banner")banner(...a);else if(n=="sfx")sfx(...a);else if(n=="sparks")sparks(...a);else if(n=="fp")$("#fprompt").classList.toggle("on",a[0]);else if(n=="results")results()}}
+ const fxq=NET.fxq||[];NET.fxq=[];fxq.forEach((v,j)=>{if(v)(j?B:A).fx=v});
+ const evq=NET.evq||[];NET.evq=[];for(const[n,...a]of evq){if(n=="banner")banner(...a);else if(n=="sfx")sfx(...a);else if(n=="sparks")sparks(...a);else if(n=="fp")$("#fprompt").classList.toggle("on",a[0]);else if(n=="results")results()}}
 function netMsg(m){
- if(m.t=="room"){NET.code=m.code;lanUI("hosting","මෙම අංකය ප්‍රතිවාදියාට දෙන්න. ඔවුන් එකම ජාලයේ සිට මෙම ක්‍රීඩාව විවෘත කර “සටනකට එක්වන්න” තෝරාගත යුතුය.")}
+ if(m.t=="room"){NET.code=m.code;lanUI("hosting","මෙම අංකය ප්‍රතිවාදියාට දෙන්න. ඔවුන් මෙම ක්‍රීඩාව විවෘත කර “සටනකට එක්වන්න” තෝරා මෙම අංකය ඇතුළත් කළ යුතුය.")}
  else if(m.t=="nojoin"){lanUI("join","එම අංකයෙන් සටනක් හමු නොවීය. අංකය පරීක්ෂා කරන්න.");netClose()}
  else if(m.t=="paired"){NET.role=m.role;NET.on=true;NET.picks={};overlay(null);S="select";base("select");updSelect();preview();sfx("roll")}
- else if(m.t=="left"){const n=NET;NET=null;try{n.ws.close()}catch(e){}netLost()}
+ else if(m.t=="left"){netClose();netLost()}
  else if(NET?.role=="host"){
   if(m.t=="k"){RK[m.K]=m.d;if(m.d&&B&&FIGHTS.includes(S))fightKey(B,A,m.K,RK)}
   else if(m.t=="pick"){NET.picks.g=[m.i,m.c];netTryStart()}
   else if(m.t=="loaded"){NET.gl=true;NET.onLoaded?.()}
   else if(m.t=="req")netDo(m.a)}
  else if(NET?.role=="guest"){
-  if(m.t=="st")NET.st=m;
+  if(m.t=="st"){(NET.evq||=[]).push(...m.ev);m.fs.forEach((o,j)=>{if(o.fx)(NET.fxq||=[])[j]=o.fx});NET.st=m}
   else if(m.t=="go")netMatch(m.h,m.g);
   else if(m.t=="act"){if(m.a=="rematch")overlay(null);else if(m.a=="select")toSelect()}}}
 
