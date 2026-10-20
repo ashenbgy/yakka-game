@@ -5,6 +5,7 @@
 <title>Yaksha Kombat</title>
 <link rel=icon type="image/svg+xml" href="favicon.svg">
 <meta name=theme-color content="#140504">
+<meta property="og:type" content="website"><meta property="og:title" content="Yaksha Kombat — යක්ෂ සටන"><meta property="og:description" content="ලංකාදීපයේ යක්ෂයින්ගේ 3D සටන් ක්‍රීඩාව · 14 සටන්කරුවන් · 7 සටන් බිම්"><meta name="description" content="A 3D fighting game featuring demons from Sri Lankan folklore. 14 fighters, 7 arenas, procedural audio.">
 <link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;600;700&family=Noto+Sans+Sinhala:wght@400;600;700&family=Noto+Serif+Sinhala:wght@600;800&display=swap">
 <style>
@@ -91,12 +92,26 @@ kbd.ar{font-size:1.15cqw}
 .dev{position:absolute;left:2.4cqw;bottom:1.6cqw;font-size:.8cqw;letter-spacing:.12em;color:var(--mut)}.dev b,.devbig b{color:var(--g2);font-family:Inter,sans-serif;font-weight:700;letter-spacing:.04em}
 .devbig{margin-top:1.4cqw;font-size:.9cqw;letter-spacing:.3em;text-transform:uppercase;color:var(--mut)}.devbig b{display:block;margin-top:.4cqw;font-size:2.4cqw;letter-spacing:.1em;text-transform:none}
 #results small{display:block;letter-spacing:.45em;text-transform:uppercase;color:var(--mut);font-size:.85cqw}#results h2{font-size:3.6cqw;margin:.6cqw 0}#results p{color:#d9cdb5;font-size:1cqw;margin:0;letter-spacing:.1em}
+#combo{position:absolute;left:50%;top:22%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity .15s}
+#combo b{font:900 3.2cqw Cinzel,serif;color:var(--g2);text-shadow:0 .2cqw .8cqw #000}
+#combo small{display:block;font-size:.85cqw;letter-spacing:.3em;color:var(--mut)}
+#combo.on{opacity:1}
+#touch{display:none;position:absolute;inset:0;pointer-events:none;z-index:50}
+@media(pointer:coarse){#touch{display:block}}
+.tpad{position:absolute;left:2cqw;bottom:3cqw;width:18cqw;height:18cqw;pointer-events:none}
+.tpad button{position:absolute;width:5.5cqw;height:5.5cqw;border:none;border-radius:50%;background:rgba(255,255,255,.13);color:#fff;font-size:2cqw;display:grid;place-items:center;-webkit-tap-highlight-color:transparent;touch-action:none;pointer-events:auto}
+.tpad .tu{top:0;left:50%;transform:translateX(-50%)}.tpad .td{bottom:0;left:50%;transform:translateX(-50%)}.tpad .tl{left:0;top:50%;transform:translateY(-50%)}.tpad .tr{right:0;top:50%;transform:translateY(-50%)}
+.tatk{position:absolute;right:2cqw;bottom:3cqw;pointer-events:none;display:grid;grid-template-columns:repeat(3,5.5cqw);gap:1cqw}
+.tatk button{width:5.5cqw;height:5.5cqw;border:none;border-radius:50%;font-size:1.6cqw;-webkit-tap-highlight-color:transparent;touch-action:none;pointer-events:auto}
+.tatk .tp{background:rgba(232,185,74,.25);color:var(--g2)}.tatk .tk{background:rgba(197,29,38,.25);color:#ff8a7a}.tatk .tb{background:rgba(255,255,255,.15);color:#fff}.tatk .ts{background:rgba(100,180,255,.2);color:#90c8ff}
+#pauseMoves{text-align:left;max-height:12cqw;overflow-y:auto;margin:.6cqw 0}
+#pauseMoves .crow{display:flex;justify-content:space-between;align-items:center;padding:.35cqw 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:.9cqw}
 </style>
 <div id=wrap><canvas id=w></canvas><div id=ui>
 <div id=boot class="scr on"><div class=logo><h1>Yaksha <span>Kombat</span></h1></div><div class=loadbar><i id=bootBar></i></div><p id=bootTxt>යක්ෂයින් කැඳවමින්…</p></div>
 <div id=title class=scr><div class=vign></div>
  <div class=tpanel><div class=logo><h1>Yaksha <span>Kombat</span></h1><p class=tag>ලංකාදීපයේ යක්ෂයෝ</p></div>
- <nav class=menu><button data-a=play>සටන අරඹන්න</button><button data-a=controls>පාලන යතුරු</button><button data-a=credits>ගෞරව නාමාවලිය</button><button data-a=sound>ශබ්දය: සක්‍රීය</button></nav></div>
+ <nav class=menu><button data-a=play>සටන අරඹන්න</button><button data-a=controls>පාලන යතුරු</button><button data-a=credits>ගෞරව නාමාවලිය</button><button data-a=diff>දුෂ්කරතාව: මධ්‍යම</button><button data-a=sound>ශබ්දය: සක්‍රීය</button></nav></div>
  <div class=dev>Developed by <b>Ashenbgy</b></div>
  <div class=hint><kbd class=ar>↑</kbd><kbd class=ar>↓</kbd><span>තෝරන්න</span><kbd>Enter</kbd><span>තහවුරු කරන්න</span></div></div>
 <div id=select class=scr><div class=vign></div><div class=stitle>ඔබේ සටන්කරුවා තෝරන්න<small>වට තුනෙන් දෙකක් · පරිගණකයට එරෙහිව</small></div><div id=sLoad>කැඳවමින්…</div>
@@ -111,9 +126,10 @@ kbd.ar{font-size:1.15cqw}
  <div class="pl l" id=p1><div class=nm><b></b><span></span></div><div class=hp><i class=tr></i><i class=fl></i></div><div class=row><div class=mt><i></i><span>තොවිල් බලය</span></div><div class=pips></div></div><div class=st></div></div>
  <div class=clock><b id=tmr>99</b><small id=arenaNm></small></div>
  <div id=banner><div class=b1></div><div class=b2></div></div>
+ <div id=combo><b></b><small></small></div>
  <div id=fprompt><span><kbd>J</kbd>බිලි</span><span><kbd>I</kbd>මහා බිලි</span><span><kbd>K</kbd>ශාන්තිය</span><i id=fbar></i></div>
  <div class="hint min"><kbd>Esc</kbd><span>විරාමය</span><kbd>M</kbd><span>ශබ්දය</span></div></div>
-<div id=pause class="scr ov"><div class=panel><h2>විරාමය</h2><nav class=menu><button data-a=resume>නැවත අරඹන්න</button><button data-a=controls>පාලන යතුරු</button><button data-a=sound>ශබ්දය: සක්‍රීය</button><button data-a=select>සටන්කරුවා තෝරන්න</button><button data-a=title>ප්‍රධාන මෙනුව</button></nav></div></div>
+<div id=pause class="scr ov"><div class=panel><h2>විරාමය</h2><div id=pauseMoves></div><nav class=menu><button data-a=resume>නැවත අරඹන්න</button><button data-a=controls>පාලන යතුරු</button><button data-a=sound>ශබ්දය: සක්‍රීය</button><button data-a=select>සටන්කරුවා තෝරන්න</button><button data-a=title>ප්‍රධාන මෙනුව</button></nav></div></div>
 <div id=controls class="scr ov"><div class="panel wide"><h2>පාලන යතුරු</h2>
  <div class=cgrid>
   <div><h4>චලනය</h4><div class=crow>ඉදිරියට / පසුපසට<span><kbd>A</kbd><kbd>D</kbd> / <kbd class=ar>←</kbd><kbd class=ar>→</kbd></span></div><div class=crow>පැනීම<span><kbd>W</kbd> / <kbd class=ar>↑</kbd></span></div>
@@ -130,6 +146,10 @@ kbd.ar{font-size:1.15cqw}
   <div><h4>පරිසරය සහ තාක්ෂණය</h4><div class=crow>රාත්‍රී ආලෝකය සහ වයනය<span>Poly Haven (CC0)</span></div><div class=crow>3D එන්ජිම<span>three.js</span></div><div class=crow>අකුරු<span>Cinzel · Inter · Noto Sinhala</span></div></div></div>
  <nav class=menu><button data-a=back>ආපසු</button></nav></div></div>
 <div id=results class="scr ov"><div class=panel><small id=rTop></small><h2 id=rTitle></h2><p id=rSub></p><nav class=menu><button data-a=rematch>නැවත සටන</button><button data-a=select>සටන්කරුවා තෝරන්න</button><button data-a=title>ප්‍රධාන මෙනුව</button></nav></div></div>
+<div id=touch>
+ <div class=tpad><button class=tu data-k=ArrowUp>↑</button><button class=td data-k=ArrowDown>↓</button><button class=tl data-k=ArrowLeft>←</button><button class=tr data-k=ArrowRight>→</button></div>
+ <div class=tatk><button class=tp data-k=j>👊</button><button class=tp data-k=i>✊</button><button class=ts data-k=o>⚡</button><button class=tk data-k=k>🦶</button><button class=tk data-k=l>💥</button><button class=tb data-k=" ">🛡</button></div>
+</div>
 </div></div>
 <script type=importmap>{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type=module>
@@ -170,14 +190,19 @@ const ARENAS=[["එල්ල තේ වතු","#111a24",["hills","tea","palm"],
  ["මහ වනය","#0c170e",["jungle","rock"],"#73845a","fly"],["ගම්මානය","#1f150c",["hut","palm","rock"],"#a58a68","ember"],["අසුර මාලිගය","#10204a",["pillar","throne"],"#9a9aaa","ember"]];
 const GY=380,k={};
 let S="boot",sel=0,selC=0,A,B,P=[],arena,tm=0,buf=[],shake=0,fx=null,paused=false,roundNo=0,timer=0;
+let diff=1,slowMo=1,slowAcc=0;
+const DIFF=[{name:"පහසු",atk:.015,blk:.15,sp:.25},{name:"මධ්‍යම",atk:.04,blk:.4,sp:.5},{name:"දුෂ්කර",atk:.07,blk:.65,sp:.7}];
 const rnd=a=>a[Math.random()*a.length|0];
-const mk=(i,x,face,human)=>({i,d:R[i],x,y:GY,vx:0,vy:0,face,hp:R[i][2],max:R[i][2],meter:0,cd:0,stun:0,pois:0,slow:0,rev:0,sil:0,buff:0,inv:0,dash:0,atk:null,human,wins:0,bk:0});
-function round(){for(const f of[A,B])Object.assign(f,{x:f===A?200:600,y:GY,vx:0,hp:f.max,meter:0,cd:0,stun:0,pois:0,slow:0,rev:0,sil:0,buff:0,inv:0,dash:0,atk:null});
+const mk=(i,x,face,human)=>({i,d:R[i],x,y:GY,vx:0,vy:0,face,hp:R[i][2],max:R[i][2],meter:0,cd:0,stun:0,pois:0,slow:0,rev:0,sil:0,buff:0,inv:0,dash:0,atk:null,human,wins:0,bk:0,combo:0,comboT:0});
+function updCombo(s){const cEl=$("#combo");if(!cEl)return;
+ if(s===A&&s.combo>=2){cEl.firstElementChild.textContent=`${s.combo} පහරක්!`;cEl.lastElementChild.textContent=s.combo>4?"මහා ප්‍රහාරය!":"සම්බන්ධ ප්‍රහාර";cEl.classList.add("on")}}
+function round(){slowMo=1;slowAcc=0;$("#combo")?.classList.remove("on");for(const f of[A,B])Object.assign(f,{x:f===A?200:600,y:GY,vx:0,hp:f.max,meter:0,cd:0,stun:0,pois:0,slow:0,rev:0,sil:0,buff:0,inv:0,dash:0,atk:null,combo:0,comboT:0});
  P=[];arena=rnd(ARENAS);buildArena(arena);fx=null;A.tr=B.tr=100;roundNo++;timer=99*60;S="intro";tm=110;
  banner(`${roundNo} වන වටය`,roundNo==3?"අවසාන වටය":"","pop");AU.mode="fight";sfx("roll");$("#arenaNm").textContent=arena[0]}
 function hurt(t,dmg,st,s){if(t.inv>0)return;
  if(t.blk&&Math.sign(s.x-t.x)==t.face)dmg*=.2;
- const bl=dmg<1||t.blk;if(!bl){t.atk=null;t.pend=null;t.dash=0}sfx("hit",dmg,bl);if(!bl&&dmg>=10&&Math.random()<.6)sfx("growl",voice(t),.35);sparks(X(t.x),Y(t.y)+1.15,bl?8:18,!bl);t.hp-=dmg*(s.buff>0?1.5:1)*s.d[4];t.meter=Math.min(100,t.meter+dmg*2);t.flash=6;t.vx=s.face*3;shake=Math.min(.25,dmg*.012);
+ const bl=dmg<1||t.blk;if(!bl){t.atk=null;t.pend=null;t.dash=0;if(s){s.combo=(s.combo||0)+1;s.comboT=80;dmg*=(1+Math.min(s.combo-1,6)*.08);updCombo(s)}}
+ sfx("hit",dmg,bl);if(!bl&&dmg>=10&&Math.random()<.6)sfx("growl",voice(t),.35);sparks(X(t.x),Y(t.y)+1.15,bl?8:18,!bl);t.hp-=dmg*(s.buff>0?1.5:1)*s.d[4];t.meter=Math.min(100,t.meter+dmg*2);t.flash=6;t.vx=s.face*3;shake=Math.min(.25,dmg*.012);
  if(st=="stun")t.stun=50;if(st=="poison")t.pois=180;if(st=="slow")t.slow=240;if(st=="rev")t.rev=240;if(st=="sil")t.sil=180}
 // attack timing comes from the mocap clips: hitAt = frame where fist/foot reaches furthest (see measureImpacts)
 const TS={punch:1.5,punch2:1.5,kick:1.4,kick2:1.4,fire:1.5,cast:1.6},REC=12;
@@ -210,8 +235,10 @@ function toSelect(){paused=false;AU.mode="menu";if(AU.c)AU.mus.gain.setTargetAtT
  if(prev)scene.add(prev.root);else preview();buildArena(ARENAS[0])}
 function toTitle(){toSelect();S="title";base("title")}
 function rematch(){overlay(null);for(const f of[A,B]){f.wins=0;f.win=0}roundNo=0;round()}
-function setPause(p){paused=p;overlay(p?"pause":null);if(AU.c)AU.mus.gain.setTargetAtTime(p?.06:.32,now(),.1)}
+function setPause(p){paused=p;overlay(p?"pause":null);if(AU.c)AU.mus.gain.setTargetAtTime(p?.06:.32,now(),.1);
+ if(p&&A){const r=A.d;$("#pauseMoves").innerHTML=`<h4 style="margin:0 0 .4cqw;color:var(--g);font-size:.8cqw;letter-spacing:.2em;text-transform:uppercase">විශේෂ ප්‍රහාර: ${SIN[A.i]}</h4>`+r[7].map(m=>`<div class=crow><span>${m[0]}</span><span>${kb(m[1])}</span></div>`).join("")}}
 function endRound(w,how){const l=w==A?B:A;w.wins++;l.atk=w.atk=null;P=[];sfx("gong");sfx("growl",voice(l),.7);setTimeout(()=>sfx("laugh",voice(w)),700);
+ slowMo=.25;setTimeout(()=>{slowMo=1},750);
  if(w.wins>=2){l.hp=0;S="finish";w.win=1;l.win=0;tm=w==A?330:150;banner(how,"","pop red");
   setTimeout(()=>{if(S=="finish"){banner("අවසන් කරන්න!","","pop red");$("#fprompt").classList.toggle("on",w==A)}},1100)}
  else{S="between";tm=190;banner(how,`${SIN[w.i]} වටය දිනයි`,"pop red")}}
@@ -236,10 +263,12 @@ addEventListener("keyup",e=>k[e.key.toLowerCase()]=0);addEventListener("blur",()
 function step(f,o){
  let L,Rt,U,blk,d=Math.abs(o.x-f.x);
  if(f.human){L=k.a||k.arrowleft;Rt=k.d||k.arrowright;U=k.w||k.arrowup;blk=k[" "];if(f.rev>0)[L,Rt]=[Rt,L]}
- else{L=d>90&&o.x<f.x;Rt=d>90&&o.x>f.x;U=Math.random()<.005;if(!o.atk)f.bk=Math.random()<.4;blk=o.atk&&f.bk&&d<110;
-  if(S=="fight"&&f.cd<=0&&f.stun<=0&&Math.random()<.04){
-   if(f.meter>=100&&Math.random()<.5)sup(f);
-   else if(Math.random()<.5&&f.sil<=0)use(f,o,rnd(f.d[7]));else if(d<90)basic(f,1+Math.random()*4|0)}}
+ else{const D=DIFF[diff]||DIFF[1];
+  L=d>90&&o.x<f.x;Rt=d>90&&o.x>f.x;U=Math.random()<.005;if(!o.atk)f.bk=Math.random()<D.blk;blk=o.atk&&f.bk&&d<110;
+  if(S=="fight"&&f.cd<=0&&f.stun<=0&&Math.random()<D.atk){
+   if(f.meter>=100&&Math.random()<D.sp)sup(f);
+   else if(Math.random()<D.sp&&f.sil<=0)use(f,o,rnd(f.d[7]));else if(d<90)basic(f,1+Math.random()*4|0)}}
+ if(f.comboT>0&&--f.comboT<=0){f.combo=0;if(f===A)$("#combo")?.classList.remove("on")}
  f.blk=!!blk&&f.y>=GY;
  for(const s of["cd","stun","pois","slow","rev","sil","buff","inv","flash"])if(f[s]>0)f[s]--;
  if(f.pois>0&&f.pois%30==0)f.hp=Math.max(1,f.hp-1.5);
@@ -646,7 +675,9 @@ const activeMenu=()=>$(`#${ovId||baseId} .menu`);
 function menuSel(m,i){const b=[...m.children];i=(i+b.length)%b.length;b.forEach((x,j)=>x.classList.toggle("sel",j==i));m.dataset.i=i}
 function menuReset(){const m=activeMenu();if(m)menuSel(m,0)}
 $$(".menu button").forEach(b=>{b.onmouseenter=()=>{const m=b.parentNode,i=[...m.children].indexOf(b);if(+m.dataset.i!==i){menuSel(m,i);sfx("tick")}};b.onclick=()=>act(b.dataset.a)});
-function act(a){if(a=="sound")return setSound(!AU.on);sfx(a=="back"||a=="resume"?"back":"ok");if(a=="play"){S="select";base("select");updSelect()}else if(a=="controls"||a=="credits"){ctlBack=ovId;overlay(a)}else if(a=="back")overlay(ctlBack);
+function act(a){if(a=="sound")return setSound(!AU.on);
+ if(a=="diff"){diff=(diff+1)%DIFF.length;$$("[data-a=diff]").forEach(b=>b.textContent="දුෂ්කරතාව: "+DIFF[diff].name);sfx("tick");return}
+ sfx(a=="back"||a=="resume"?"back":"ok");if(a=="play"){S="select";base("select");updSelect()}else if(a=="controls"||a=="credits"){ctlBack=ovId;overlay(a)}else if(a=="back")overlay(ctlBack);
  else if(a=="resume")setPause(false);else if(a=="select")toSelect();else if(a=="title")toTitle();else if(a=="rematch")rematch()}
 function banner(t1,t2="",cls=""){const b=$("#banner");b.className="";void b.offsetWidth;b.className=cls;b.firstElementChild.textContent=t1;b.lastElementChild.textContent=t2}
 // select screen
@@ -669,7 +700,33 @@ function hudUpd(){if(!A)return;
   const st=Object.keys(ST).filter(s=>f[s]>0).map(s=>`<span>${ST[s]}</span>`).join("");if(h.st.innerHTML!=st)h.st.innerHTML=st}
  const s=String(Math.max(0,Math.ceil(timer/60)));if(tmr.textContent!=s)tmr.textContent=s;
  if(S=="finish")fbar.style.width=tm/330*100+"%"}
-function loop(){if(A&&!paused)tick();render();if(baseId=="hud")hudUpd();requestAnimationFrame(loop)}
+$$("#touch button").forEach(btn=>{
+ const kName=btn.dataset.k,send=type=>window.dispatchEvent(new KeyboardEvent(type,{key:kName}));
+ btn.addEventListener("pointerdown",e=>{e.preventDefault();auInit();send("keydown")});
+ btn.addEventListener("pointerup",e=>{e.preventDefault();send("keyup")});
+ btn.addEventListener("pointercancel",e=>{e.preventDefault();send("keyup")});
+});
+const gpPrev={};
+function pollGamepad(){
+ const gp=navigator.getGamepads?.()[0];if(!gp)return;
+ const send=(key,dn)=>{
+  if(dn&&!gpPrev[key]){gpPrev[key]=1;window.dispatchEvent(new KeyboardEvent("keydown",{key}))}
+  else if(!dn&&gpPrev[key]){gpPrev[key]=0;window.dispatchEvent(new KeyboardEvent("keyup",{key}))}
+ };
+ const b=gp.buttons,ax=gp.axes;
+ send("ArrowLeft",ax[0]<-.4||b[14]?.pressed);send("ArrowRight",ax[0]>.4||b[15]?.pressed);
+ send("ArrowUp",ax[1]<-.4||b[12]?.pressed);send("ArrowDown",ax[1]>.4||b[13]?.pressed);
+ send("j",b[0]?.pressed);send("k",b[1]?.pressed);send("i",b[2]?.pressed);send("l",b[3]?.pressed);
+ send(" ",b[4]?.pressed);send("o",b[5]?.pressed);send("Escape",b[9]?.pressed);
+}
+function loop(){
+ pollGamepad();
+ if(A&&!paused){
+  slowAcc+=slowMo;
+  while(slowAcc>=1){tick();slowAcc-=1}
+ }
+ render();if(baseId=="hud")hudUpd();requestAnimationFrame(loop)
+}
 THREE.DefaultLoadingManager.onProgress=(u,l,t)=>{$("#bootBar").style.width=l/t*100+"%"};
 Promise.all([...["male","female"].map(n=>new GLTFLoader().loadAsync("models/"+n+".glb")),new RGBELoader().loadAsync("assets/night.hdr"),
  ...Object.entries(AF).map(([k,n])=>new FBXLoader().loadAsync(encodeURI(`models/anims/${n}.fbx`)).then(o=>{ANIM.clips[k]=cleanClip(o.animations[0],k);if(k=="idle")ANIM.skel=o}))]).then(([a,b,hdr])=>{BASE.male=a;BASE.female=b;measureImpacts();
