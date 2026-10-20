@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff3cf"/>
+      <stop offset=".55" stop-color="#e8b94a"/>
+      <stop offset="1" stop-color="#8a5a12"/>
+    </linearGradient>
+    <radialGradient id="bg" cx=".5" cy=".4" r=".7">
+      <stop offset="0" stop-color="#5a0a0e"/>
+      <stop offset="1" stop-color="#140504"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- horns -->
+  <path d="M15 22 C10 14 10 8 13 3 C15 10 19 14 24 17 Z" fill="url(#g)"/>
+  <path d="M49 22 C54 14 54 8 51 3 C49 10 45 14 40 17 Z" fill="url(#g)"/>
+  <!-- mask face -->
+  <path d="M32 12 C45 12 52 20 52 32 C52 45 43 57 32 58 C21 57 12 45 12 32 C12 20 19 12 32 12 Z" fill="url(#g)"/>
+  <!-- brow -->
+  <path d="M17 27 L29 31 L32 28 L35 31 L47 27 L45 24 L35 27 L32 25 L29 27 L19 24 Z" fill="#5a0a0e"/>
+  <!-- glowing eyes -->
+  <path d="M19 32 L29 34 L27 38 L21 37 Z" fill="#c51d26"/>
+  <path d="M45 32 L35 34 L37 38 L43 37 Z" fill="#c51d26"/>
+  <!-- mouth with fangs -->
+  <path d="M21 44 C26 48 38 48 43 44 C41 52 36 54 32 54 C28 54 23 52 21 44 Z" fill="#2a0306"/>
+  <path d="M24 45 L26.5 52 L29 46 Z M35 46 L37.5 52 L40 45 Z" fill="#fff8e6"/>
+</svg>
