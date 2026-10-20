@@ -235,7 +235,8 @@ function toSelect(){paused=false;AU.mode="menu";if(AU.c)AU.mus.gain.setTargetAtT
  if(prev)scene.add(prev.root);else preview();buildArena(ARENAS[0])}
 function toTitle(){toSelect();S="title";base("title")}
 function rematch(){overlay(null);for(const f of[A,B]){f.wins=0;f.win=0}roundNo=0;round()}
-function setPause(p){paused=p;overlay(p?"pause":null);if(AU.c)AU.mus.gain.setTargetAtTime(p?.06:.32,now(),.1);
+function setPause(p){paused=p;overlay(p?"pause":null);if(AU.c)AU.mus.gain.setTargetAtTime(p?.06:.34,now(),.1);
+ if(AU.dr)AU.dr.flt.frequency.setTargetAtTime(p?90:220,now(),.1);
  if(p&&A){const r=A.d;$("#pauseMoves").innerHTML=`<h4 style="margin:0 0 .4cqw;color:var(--g);font-size:.8cqw;letter-spacing:.2em;text-transform:uppercase">විශේෂ ප්‍රහාර: ${SIN[A.i]}</h4>`+r[7].map(m=>`<div class=crow><span>${m[0]}</span><span>${kb(m[1])}</span></div>`).join("")}}
 function endRound(w,how){const l=w==A?B:A;w.wins++;l.atk=w.atk=null;P=[];sfx("gong");sfx("growl",voice(l),.7);setTimeout(()=>sfx("laugh",voice(w)),700);
  slowMo=.25;setTimeout(()=>{slowMo=1},750);
@@ -607,37 +608,99 @@ function render(){const t=performance.now()/1000,raw=t-last/1000,dt=paused?0:Mat
 
 // ---------- AUDIO: procedural Sri Lankan devil-dance ensemble ----------
 // yak bera drums (thom / tha), thalam finger cymbals, thammattama sticks, horanewa reed; demon voices and fight SFX. No audio files.
-const AU={on:(()=>{try{return localStorage.getItem("yk-sound")!="0"}catch(e){return true}})(),mode:"menu",step:0,mi:3};
+const AU={on:(()=>{try{return localStorage.getItem("yk-sound")!="0"}catch(e){return true}})(),mode:"menu",step:0,phrase:0,menuPhrase:0};
+function startDrone(){if(!AU.c||AU.dr)return;
+ const c=AU.c,g=c.createGain();g.gain.value=.14;g.connect(AU.mus);
+ const flt=c.createBiquadFilter();flt.type="lowpass";flt.frequency.value=220;flt.Q.value=2.5;flt.connect(g);
+ for(const f of[73.42,110.0,146.83]){
+  const o=c.createOscillator();o.type="sawtooth";o.frequency.value=f;o.detune.value=(Math.random()-.5)*12;
+  const og=c.createGain();og.gain.value=f<100?.38:.22;o.connect(og);og.connect(flt);o.start()}
+ AU.dr={g,flt}}
 function auInit(){if(AU.c){if(AU.c.state!="running")AU.c.resume();return}
  const c=AU.c=new(window.AudioContext||window.webkitAudioContext)(),cmp=c.createDynamicsCompressor();cmp.threshold.value=-14;cmp.ratio.value=4;cmp.connect(c.destination);
  AU.mst=c.createGain();AU.mst.gain.value=AU.on?.9:0;AU.mst.connect(cmp);
- AU.mus=c.createGain();AU.mus.gain.value=.32;AU.mus.connect(AU.mst);AU.fx=c.createGain();AU.fx.gain.value=.85;AU.fx.connect(AU.mst);
+ AU.mus=c.createGain();AU.mus.gain.value=.34;AU.mus.connect(AU.mst);AU.fx=c.createGain();AU.fx.gain.value=.85;AU.fx.connect(AU.mst);
  const n=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=n.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;AU.nb=n;
  const ir=c.createBuffer(2,c.sampleRate*2.2|0,c.sampleRate);for(let ch=0;ch<2;ch++){const x=ir.getChannelData(ch);for(let i=0;i<x.length;i++)x[i]=(Math.random()*2-1)*Math.pow(1-i/x.length,3)}
  AU.rev=c.createConvolver();AU.rev.buffer=ir;const wet=c.createGain();wet.gain.value=.28;AU.rev.connect(wet);wet.connect(AU.mst);
- AU.next=c.currentTime+.15;setInterval(sched,25)}
+ startDrone();AU.next=c.currentTime+.15;setInterval(sched,25)}
 const now=()=>AU.c.currentTime;
 function env(t,a,dur,peak,dest,rev){const g=AU.c.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(1e-4,t+dur);g.connect(dest);if(rev)g.connect(AU.rev);return g}
 function tone(t,type,f0,f1,dur,vol,dest=AU.fx,rev=0,a=.003){const o=AU.c.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);if(f1!=f0)o.frequency.exponentialRampToValueAtTime(f1,t+dur);o.connect(env(t,a,dur,vol,dest,rev));o.start(t);o.stop(t+dur+.05)}
 function noise(t,dur,vol,type,f0,f1=f0,q=1,dest=AU.fx,rev=0){const s=AU.c.createBufferSource(),f=AU.c.createBiquadFilter();s.buffer=AU.nb;s.loop=true;f.type=type;f.Q.value=q;f.frequency.setValueAtTime(f0,t);
  if(f1!=f0)f.frequency.exponentialRampToValueAtTime(f1,t+dur);s.connect(f);f.connect(env(t,.004,dur,vol,dest,rev));s.start(t,Math.random());s.stop(t+dur+.05)}
-// instruments
-const thom=(t,v=1,d=AU.mus)=>{tone(t,"sine",120,52,.38,.9*v,d);noise(t,.05,.22*v,"lowpass",600,300,1,d)};          // yak bera bass stroke
-const tha=(t,v=1,d=AU.mus)=>{noise(t,.09,.5*v,"bandpass",1800,1200,2.5,d);tone(t,"triangle",330,280,.08,.22*v,d)}; // open hand slap
-const tap=t=>noise(t,.04,.15,"bandpass",2600,2600,3,AU.mus);
-const thalam=(t,v=1)=>{for(const f of[3150,4270,5900])tone(t,"square",f,f*.995,.22,.02*v,AU.mus,1)};               // brass finger cymbals
-const thammattama=t=>{tone(t,"sine",420,300,.12,.35,AU.mus);noise(t,.03,.25,"highpass",3000,3000,1,AU.mus)};
-const SCALE=[0,1,4,5,7,8,11,12],ROOT=293.66;  // eerie D scale with flat 2nd and raised 3rd
-function horanewa(t,semi,dur,v){const c=AU.c,o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),bp=c.createBiquadFilter(),lp=c.createBiquadFilter(),g=c.createGain(),f=ROOT*2**(semi/12);
- o.type="sawtooth";o.frequency.setValueAtTime(f*.96,t);o.frequency.exponentialRampToValueAtTime(f,t+.07);l.frequency.value=5.6;lg.gain.value=f*.013;l.connect(lg);lg.connect(o.frequency);
- bp.type="bandpass";bp.frequency.value=1400;bp.Q.value=1.6;lp.type="lowpass";lp.frequency.value=3200;o.connect(bp);bp.connect(lp);lp.connect(g);g.connect(AU.mus);g.connect(AU.rev);
- g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.15*v,t+.04);g.gain.setValueAtTime(.15*v,t+dur*.8);g.gain.linearRampToValueAtTime(0,t+dur);o.start(t);l.start(t);o.stop(t+dur+.03);l.stop(t+dur+.03)}
-function melody(t,sd){let i=AU.mi,u=0;for(const len of[3,3,2,1,3]){i=Math.max(0,Math.min(SCALE.length-1,i+(Math.random()*3|0)-1));horanewa(t+u*sd,SCALE[i]-(AU.mode=="fight"?0:12),len*sd*.95,AU.mode=="fight"?.75:.9);u+=len}AU.mi=i}
-// 12 steps per bar (triplet feel); menu = slow & sparse, fight = fast with ghost taps and rolls
-function sched(){const c=AU.c;if(AU.next<c.currentTime-.2)AU.next=c.currentTime+.05;while(AU.next<c.currentTime+.12){const t=AU.next,fgt=AU.mode=="fight",sd=60/(fgt?150:92)/3,s=AU.step%12,bar=(AU.step/12|0)%4;
-  if(AU.on){if(s==0||s==6)thom(t,s?.8:1);if(s==3||s==9)tha(t,fgt?1:.7);if(fgt&&s%3==2)tap(t);if(fgt&&s==10&&bar%2)thammattama(t);if(s%3==0)thalam(t,fgt?1:.6);
-   if(fgt&&bar==3&&s>=7)tha(t,.4+s*.05);if(s==0&&(fgt||bar%2==0))melody(t,sd)}
-  AU.next+=sd;AU.step++}}
+
+// Sri Lankan percussion instruments
+const thom=(t,v=1,d=AU.mus)=>{tone(t,"sine",142,48,.44,1.15*v,d);tone(t,"triangle",92,45,.28,.36*v,d);noise(t,.04,.4*v,"lowpass",480,160,1.5,d)};
+const tha=(t,v=1,d=AU.mus)=>{noise(t,.07,.65*v,"bandpass",1600,1000,2.2,d);noise(t,.025,.4*v,"highpass",3600,2400,1,d);tone(t,"triangle",330,220,.06,.32*v,d)};
+const thei=(t,v=1,d=AU.mus)=>{noise(t,.035,.35*v,"bandpass",2400,1900,3.5,d);tone(t,"sine",280,220,.04,.2*v,d)};
+const kadittu=(t,v=1,d=AU.mus)=>{tone(t,"triangle",540,420,.05,.45*v,d);noise(t,.025,.3*v,"bandpass",3400,2800,4,d)};
+const mandra=(t,v=1,d=AU.mus)=>{tone(t,"sine",260,170,.08,.42*v,d);noise(t,.035,.25*v,"lowpass",1100,500,2,d)};
+const thalam=(t,v=1,open=false)=>{const dur=open?.48:.08;for(const f of[3180,4320,5860,7120])tone(t,"sine",f,f*.996,dur,(open?.024:.014)*v,AU.mus,open?1:0);if(!open)noise(t,.02,.12*v,"highpass",5500,4200,2,AU.mus)};
+
+// Horanewa (Sri Lankan double-reed horn, Phrygian Dominant / Ahir Bhairav scale)
+const ROOT=293.66;
+function horanewa(t,semi,dur,v){const c=AU.c,f=ROOT*2**(semi/12);
+ const o1=c.createOscillator(),o2=c.createOscillator();o1.type="sawtooth";o2.type="sawtooth";
+ o1.frequency.setValueAtTime(f*.93,t);o1.frequency.exponentialRampToValueAtTime(f,t+.055);
+ o2.frequency.setValueAtTime(f*.93,t);o2.frequency.exponentialRampToValueAtTime(f,t+.055);o2.detune.value=7;
+ const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=5.8;
+ lg.gain.setValueAtTime(0,t);lg.gain.setValueAtTime(0,t+Math.min(.08,dur*.25));lg.gain.linearRampToValueAtTime(f*.02,t+Math.min(.22,dur*.6));
+ lfo.connect(lg);lg.connect(o1.frequency);lg.connect(o2.frequency);
+ const bp=c.createBiquadFilter();bp.type="bandpass";bp.frequency.value=1500;bp.Q.value=2.2;
+ const bp2=c.createBiquadFilter();bp2.type="bandpass";bp2.frequency.value=2900;bp2.Q.value=3.5;
+ const lp=c.createBiquadFilter();lp.type="lowpass";lp.frequency.value=4200;
+ const g=c.createGain();o1.connect(bp);o2.connect(bp);o1.connect(bp2);o2.connect(bp2);bp.connect(lp);bp2.connect(lp);lp.connect(g);
+ g.connect(AU.mus);g.connect(AU.rev);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.19*v,t+.035);g.gain.setValueAtTime(.19*v,t+dur*.8);g.gain.linearRampToValueAtTime(0,t+dur);
+ o1.start(t);o2.start(t);lfo.start(t);o1.stop(t+dur+.04);o2.stop(t+dur+.04);lfo.stop(t+dur+.04)}
+
+const MELODIES_FIGHT=[
+ [[0,3],[1,2],[4,1],[5,3],[4,3]],
+ [[7,3],[8,2],[7,1],[5,3],[4,3]],
+ [[7,1],[7,1],[8,1],[7,2],[5,1],[4,2],[5,1],[4,3]],
+ [[12,3],[10,2],[8,1],[7,3],[5,3]],
+ [[13,2],[12,2],[10,2],[8,2],[7,2],[4,2]],
+ [[4,2],[5,2],[7,2],[8,2],[7,2],[0,4]]
+];
+const MELODIES_MENU=[
+ [[0,6],[1,4],[0,2]],
+ [[4,6],[5,3],[4,3]],
+ [[7,6],[8,3],[7,3]],
+ [[5,4],[4,4],[1,4],[0,6]]
+];
+
+function playMelody(t,sd){const fgt=AU.mode=="fight",list=fgt?MELODIES_FIGHT:MELODIES_MENU;
+ const ph=list[(fgt?AU.phrase++:AU.menuPhrase++)%list.length];let u=0;
+ for(const[semi,len]of ph){horanewa(t+u*sd,semi-(fgt?0:12),len*sd*.94,fgt?.88:.7);u+=len;if(u>=12)break}}
+
+function sched(){const c=AU.c;if(AU.next<c.currentTime-.2)AU.next=c.currentTime+.05;
+ while(AU.next<c.currentTime+.12){
+  const t=AU.next,fgt=AU.mode=="fight",low=fgt&&A&&B&&(A.hp/A.max<.35||B.hp/B.max<.35);
+  const bpm=fgt?(low?166:148):84,sd=60/bpm/3,s=AU.step%12,bar=(AU.step/12|0)%8;
+  if(AU.on){
+   if(AU.dr)AU.dr.flt.frequency.setTargetAtTime(fgt?(low?340:240):150,t,.1);
+   if(fgt){
+    if(s==0){thom(t,1.15);thalam(t,1,true)}
+    if(s==3||s==9)tha(t,1);
+    if(s==6){thom(t,.9);thalam(t,.7,false)}
+    if(s==1||s==7)mandra(t,.8);
+    if(s==2||s==5||s==8||s==10)kadittu(t,low?.9:.65);
+    if(s==4)thei(t,.7);
+    if(s%3==0&&s>0)thalam(t,.5,false);
+    if((bar==3||bar==7)&&s>=6){kadittu(t,.7+(s-6)*.08);if(s%2==1)tha(t,.5+(s-6)*.1)}
+    if(s==0&&(bar!=3&&bar!=7))playMelody(t,sd);
+   }else{
+    if(s==0){thom(t,1);thalam(t,.9,true)}
+    if(s==4)tha(t,.65);
+    if(s==6)thom(t,.6);
+    if(s==9)tha(t,.5);
+    if(s==11)kadittu(t,.4);
+    if(s==0&&bar%2==0)playMelody(t,sd);
+   }
+  }
+  AU.next+=sd;AU.step++;
+ }}
 const SFX={
  tick(){const t=now();noise(t,.03,.2,"bandpass",2200,2200,4);tone(t,"triangle",880,700,.05,.07)},
  ok(){const t=now();thom(t,.9,AU.fx);tha(t+.08,.7,AU.fx)},
