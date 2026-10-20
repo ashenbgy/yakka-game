@@ -133,9 +133,9 @@ kbd.ar{font-size:1.15cqw}
 <div id=controls class="scr ov"><div class="panel wide"><h2>පාලන යතුරු</h2>
  <div class=cgrid>
   <div><h4>චලනය</h4><div class=crow>ඉදිරියට / පසුපසට<span><kbd>A</kbd><kbd>D</kbd> / <kbd class=ar>←</kbd><kbd class=ar>→</kbd></span></div><div class=crow>පැනීම<span><kbd>W</kbd> / <kbd class=ar>↑</kbd></span></div>
-   <div class=crow>පහළට<span><kbd>S</kbd> / <kbd class=ar>↓</kbd></span></div><div class=crow>පෙරළීම (Roll)<span><kbd>Shift</kbd> / දෙවරක් <kbd class=ar>→</kbd> හෝ <kbd class=ar>←</kbd></span></div><div class=crow>ආරක්ෂාව (අල්ලාගෙන)<span><kbd>Space</kbd></span></div><div class=crow>විරාමය<span><kbd>Esc</kbd></span></div><div class=crow>ශබ්දය සක්‍රීය / අක්‍රීය<span><kbd>M</kbd></span></div></div>
+   <div class=crow>නැමීම (අල්ලාගෙන)<span><kbd>S</kbd> / <kbd class=ar>↓</kbd></span></div><div class=crow>පෙරළීම (Roll)<span><kbd>Shift</kbd> / දෙවරක් <kbd class=ar>→</kbd> හෝ <kbd class=ar>←</kbd></span></div><div class=crow>ආරක්ෂාව (අල්ලාගෙන)<span><kbd>Space</kbd></span></div><div class=crow>විරාමය<span><kbd>Esc</kbd></span></div><div class=crow>ශබ්දය සක්‍රීය / අක්‍රීය<span><kbd>M</kbd></span></div></div>
   <div><h4>ප්‍රහාර</h4><div class=crow>ඉදිරි අතින් පහර<span><kbd>J</kbd></span></div><div class=crow>පසු අතින් පහර<span><kbd>I</kbd></span></div><div class=crow>ඉදිරි පයින් පහර<span><kbd>K</kbd></span></div>
-   <div class=crow>පසු පයින් පහර<span><kbd>L</kbd></span></div><div class=crow>තොවිල් මහා ප්‍රහාරය (බලය පිරුණු විට)<span><kbd>O</kbd></span></div></div>
+   <div class=crow>පසු පයින් පහර<span><kbd>L</kbd></span></div><div class=crow>ලිස්සා පහර (පහළ ප්‍රහාරය)<span><kbd class=ar>↓</kbd> + <kbd>K</kbd> / <kbd>L</kbd></span></div><div class=crow>පැනීමේ පා පහර<span><kbd class=ar>→</kbd> + <kbd>L</kbd></span></div><div class=crow>තොවිල් මහා ප්‍රහාරය (බලය පිරුණු විට)<span><kbd>O</kbd></span></div></div>
   <div class=cnote><b>විශේෂ ප්‍රහාර:</b> දිශා යතුරු ඔබා, පසුව ප්‍රහාර යතුර ඔබන්න — උදා. <kbd class=ar>↓</kbd><kbd class=ar>→</kbd><kbd>J</kbd>. ඊතල ප්‍රතිවාදියාට සාපේක්ෂයි: <kbd class=ar>→</kbd> යනු ප්‍රතිවාදියා දෙසටයි.
    අවසාන වටය දිනූ පසු: <kbd>J</kbd> බිලි, <kbd>I</kbd> මහා බිලි, හෝ <kbd>K</kbd> ශාන්තිය (සමාව දීම).</div></div>
  <nav class=menu><button data-a=back>ආපසු</button></nav></div></div>
@@ -198,46 +198,54 @@ function updCombo(s){const cEl=$("#combo");if(!cEl)return;
  if(s===A&&s.combo>=2){cEl.firstElementChild.textContent=`${s.combo} පහරක්!`;cEl.lastElementChild.textContent=s.combo>4?"මහා ප්‍රහාරය!":"සම්බන්ධ ප්‍රහාර";cEl.classList.add("on")}}
 function round(){slowMo=1;slowAcc=0;$("#combo")?.classList.remove("on");
  for(const f of[A,B]){
-  Object.assign(f,{x:f===A?200:600,y:GY,vx:0,vy:0,face:f===A?1:-1,hp:f.max,meter:0,cd:0,stun:0,pois:0,slow:0,rev:0,sil:0,buff:0,inv:0,dash:0,roll:0,rollDir:0,atk:null,combo:0,comboT:0,win:0,kd:0,daze:0,hk:false,cin:null});
+  Object.assign(f,{x:f===A?200:600,y:GY,vx:0,vy:0,face:f===A?1:-1,hp:f.max,meter:0,cd:0,stun:0,pois:0,slow:0,rev:0,sil:0,buff:0,inv:0,dash:0,roll:0,rollDir:0,atk:null,combo:0,comboT:0,win:0,kd:0,daze:0,hr:null,cin:null,cr:false,wcr:false,crT:0,dk:null,kd0:0,kdk:"knock"});
   if(f.m){if(f.m.mix)f.m.mix.stopAllAction();f.m.la=null;f.m.lf=0;f.m.curK="";f.m.cur=null;f.m.once=false;play(f.m,"idle",false,1.4,1);
    if(f.m.G)f.m.G.rotation.set(0,f.face>0?Math.PI/2:-Math.PI/2,0);f.m.mix.update(0);retarget(f.m)}}
  P=[];arena=rnd(ARENAS);buildArena(arena);fx=null;A.tr=B.tr=100;roundNo++;timer=99*60;S="intro";tm=110;
  banner(`${roundNo} වන වටය`,roundNo==3?"අවසාන වටය":"","pop");AU.mode="fight";sfx("roll");$("#arenaNm").textContent=arena[0]}
 function hurt(t,dmg,st,s){if(t.inv>0)return;
- const thr=!!s.atk?.kd;if(t.blk&&!thr&&Math.sign(s.x-t.x)==t.face)dmg*=.2;
- const bl=dmg<1||(t.blk&&!thr);if(!bl){t.atk=null;t.pend=null;t.dash=0;t.roll=0;if(s){s.combo=(s.combo||0)+1;s.comboT=80;dmg*=(1+Math.min(s.combo-1,6)*.08);updCombo(s)}}
- sfx("hit",dmg,bl);if(!bl&&dmg>=10&&Math.random()<.6)sfx("growl",voice(t),.35);sparks(X(t.x),Y(t.y)+1.15,bl?8:18,!bl);t.hp-=dmg*(s.buff>0?1.5:1)*s.d[4];t.meter=Math.min(100,t.meter+dmg*2);t.flash=6;t.vx=s.face*3;shake=Math.min(.25,dmg*.012);t.hk=/kick/.test(s.atk?.an||"");
- if(!bl&&t.hp>0&&(dmg>=14||s.atk?.kd))knock(t,s);
+ const thr=!!s.atk?.kd,low=!!s.atk?.low,canBlk=t.blk&&!thr&&!(low&&!t.cr);if(canBlk&&Math.sign(s.x-t.x)==t.face)dmg*=.2;
+ const bl=dmg<1||canBlk;if(!bl){t.atk=null;t.pend=null;t.dash=0;t.roll=0;if(s){s.combo=(s.combo||0)+1;s.comboT=80;dmg*=(1+Math.min(s.combo-1,6)*.08);updCombo(s)}}
+ sfx("hit",dmg,bl);if(!bl&&dmg>=10&&Math.random()<.6)sfx("growl",voice(t),.35);sparks(X(t.x),Y(t.y)+1.15,bl?8:18,!bl);t.hp-=dmg*(s.buff>0?1.5:1)*s.d[4];t.meter=Math.min(100,t.meter+dmg*2);t.flash=6;t.vx=s.face*3;shake=Math.min(.25,dmg*.012);t.hr=/kick/.test(s.atk?.an||"")?"hitbody":rnd(["hit","hitreact"]);
+ if(!bl&&t.hp>0&&(dmg>=14||s.atk?.kd||low))knock(t,s);
  if(st=="stun")t.stun=50;if(st=="poison")t.pois=180;if(st=="slow")t.slow=240;if(st=="rev")t.rev=240;if(st=="sil")t.sil=180}
 function startRoll(f,dir){if(f.roll>0||f.stun>0||f.cd>0||f.kd>0||f.y<GY||f.hp<=0)return;
- f.rollDir=dir||f.face;f.face=f.rollDir;f.roll=ROLL_F;f.inv=18;f.atk=null;f.pend=null;f.cd=ROLL_F;f.dash=0;f.vx=f.rollDir*f.d[3]*1.85;
- sparks(X(f.x),Y(f.y)+.25,12,false);sfx("swing",true,0);if(f.m)play(f.m,"roll",1,rollTS(),1,ROLL_IN)}
+ f.rollDir=dir||f.face;f.rk=f.rollDir==f.face?rnd(["froll","froll2"]):"roll";f.face=f.rollDir;f.cr=false;f.roll=ROLL_F;f.inv=18;f.atk=null;f.pend=null;f.cd=ROLL_F;f.dash=0;f.vx=f.rollDir*f.d[3]*1.85;
+ sparks(X(f.x),Y(f.y)+.25,12,false);sfx("swing",true,0);if(f.m)play(f.m,f.rk,1,rollTSk(f.rk),1,RC[f.rk][0])}
+const rollTSk=k=>(Math.min(RC[k][1],ANIM.clips[k]?.duration??RC[k][1])-RC[k][0])/(ROLL_F/60);
 // attack timing comes from the mocap clips: hitAt = frame where fist/foot reaches furthest (see measureImpacts)
 const TS={punch:1.5,punch2:1.5,kick:1.4,kick2:1.4,fire:1.5,cast:1.6,roll:1.8},REC=12;
 // "Falling To Roll" clip: 0.25s dive start .. 1.5s back on feet; squeeze that span into the ROLL_F-frame dodge
 const ROLL_F=30,ROLL_IN=.25,ROLL_OUT=1.5,rollTS=()=>(Math.min(ROLL_OUT,ANIM.clips.roll?.duration??ROLL_OUT)-ROLL_IN)/(ROLL_F/60);
 // clips start WIND seconds before their impact, skipping slow mocap lead-ins
-const WIND={punch:.3,punch2:.36,kick:.42,kick2:.5,fire:.6,cast:.5,grab:.45,fkick:.35};
-TS.grab=1.8;TS.fkick=1.4;
+const WIND={punch:.3,punch2:.36,kick:.42,kick2:.5,fire:.6,cast:.5,grab:.45,fkick:.35,knee:.55,sthrow:2.3,dkick:.55,slide:.3};
+Object.assign(TS,{grab:1.8,fkick:1.4,knee:1.5,sthrow:1.6,dkick:1.4,slide:1.3});
 // knockdown: "Knocked Out" falls between 1.3s and 3.2s, "Getting Up" is upright by 1.8s
 const KN_IN=1.3,KN_END=3.2,KN_TS=2.2,GU_END=1.8,GU_TS=2.2,KD_F=Math.round((KN_END-KN_IN)/KN_TS*60),KU_F=Math.round(GU_END/GU_TS*60);
-function knock(t,s){t.kd=KD_F+KU_F;t.inv=t.kd;t.atk=null;t.pend=null;t.roll=0;t.dash=0;t.stun=0;t.vx=s.face*4;sfx("boom")}
+// knockdown falls: [clip start, on-ground time, speed]; then "Getting Up"
+const KDK={knock:[KN_IN,KN_END,KN_TS],headfall:[.7,1.5,1.5],legs:[.35,1.3,1.5]},kdF=k=>Math.round((KDK[k][1]-KDK[k][0])/KDK[k][2]*60);
+// rolls: [clip start, back-on-feet time]; forward rolls use the sprint rolls
+const RC={roll:[ROLL_IN,ROLL_OUT],froll:[.1,1.3],froll2:[.08,1.12]};
+function knock(t,s,kind){const an=s.atk?.an||"";t.kdk=kind||(an=="slide"?"legs":/punch|knee/.test(an)?"headfall":rnd(["knock","headfall"]));t.kd0=kdF(t.kdk)+KU_F;t.kd=t.kd0;t.inv=t.kd;t.cr=false;t.atk=null;t.pend=null;t.roll=0;t.dash=0;t.stun=0;t.vx=s.face*4;sfx("boom")}
 const impactF=an=>Math.round(((ANIM.hit[an]??.3)-(ANIM.off[an]??0))/TS[an]*60);
 function melee(f,an,o){const h=impactF(an),T=h+(o.rec??REC);if(o.reach)sfx("swing",an.startsWith("kick"),(h-7)/60);f.atk={t:T,t0:T,hitAt:h,win:5,an,ts:TS[an],...o};f.cd=Math.max(f.cd,T-4)}
 function later(f,an,fn){f.fx=an;sfx("cast");setTimeout(()=>sfx("fire"),impactF(an)/60*1000);f.pend={t:impactF(an),fn};f.cd=Math.max(f.cd,impactF(an)+REC)}
 function use(f,o,m){const[,,ty,dmg,st]=m;f.cd=30;sfx("growl",voice(f),.45);if(!"psrad".includes(ty))sfx("cast");
  if(ty=="p")later(f,"fire",()=>P.push({x:f.x,y:f.y-60,vx:f.face*7,dmg,st,f,r:10}));
  else if(ty=="s")later(f,"fire",()=>{if(Math.abs(o.x-f.x)<350)hurt(o,dmg||3,st,f)});
- else if(ty=="r"){melee(f,"fkick",{dmg,reach:70,st});f.atk.win=10;f.dash=f.atk.hitAt+6;f.vx=f.face*7}
+ else if(ty=="r"){melee(f,f.i%2?"knee":"fkick",{dmg,reach:70,st});f.atk.win=10;f.dash=f.atk.hitAt+6;f.vx=f.face*7}
  else if(ty=="a")melee(f,"kick2",{dmg,reach:130,st,aoe:1});
  else if(ty=="d")melee(f,"grab",{dmg,reach:90,st,heal:1,kd:1,rec:34});
  else{f.fx="cast";if(ty=="t"){f.x=o.x+(f.x<o.x?70:-70);f.face=-f.face}else if(ty=="b")f.buff=300;else if(ty=="h")f.inv=60}}
 function basic(f,b){const an=["punch","punch2","kick","kick2"][b-1];melee(f,an,{dmg:b<3?6:8,reach:b<3?55:70})}
+function slide(f){f.cr=false;melee(f,"slide",{dmg:9,reach:80,low:1});f.atk.win=14;f.dash=f.atk.hitAt+10;f.vx=f.face*6;sfx("swing",true,0)}
+function dropKick(f){melee(f,"dkick",{dmg:11,reach:85,kd:1,rec:30});f.dash=f.atk.hitAt;f.vx=f.face*4}
 function sup(f){if(f.meter<100)return;f.meter=0;sfx("growl",voice(f),.8);later(f,"fire",()=>P.push({x:f.x,y:f.y-60,vx:f.face*9,dmg:28,f,r:28}))}
 function press(b){const f=A;if(f.stun>0||f.cd>0||f.kd>0)return;
  const now=performance.now(),toks=buf.filter(t=>now-t[1]<700).map(t=>t[0]);
  for(const m of f.d[7]){const p=m[1].split(","),bt=p.pop();
   if(bt==b&&f.sil<=0&&toks.slice(-p.length).join()==p.join()){buf=[];return use(f,B,m)}}
+ if(b=="3"||b=="4"){if(k.s||k.arrowdown)return slide(f);if(b=="4"&&(f.face>0?k.d||k.arrowright:k.a||k.arrowleft))return dropKick(f)}
  if(b!="R")basic(f,+b)}
 let busy=0;
 async function start(){if(busy)return;busy=1;sfx("roll");const bi=Math.random()*R.length|0;let bc=0;if(bi==sel&&bc==selC)bc=1;
@@ -254,6 +262,7 @@ function setPause(p){paused=p;overlay(p?"pause":null);if(AU.c)AU.mus.gain.setTar
  if(p&&A){const r=A.d;$("#pauseMoves").innerHTML=`<h4 style="margin:0 0 .4cqw;color:var(--g);font-size:.8cqw;letter-spacing:.2em;text-transform:uppercase">විශේෂ ප්‍රහාර: ${SIN[A.i]}</h4>`+r[7].map(m=>`<div class=crow><span>${m[0]}</span><span>${kb(m[1])}</span></div>`).join("")}}
 function endRound(w,how){const l=w==A?B:A;w.wins++;l.atk=w.atk=null;P=[];sfx("gong");sfx("growl",voice(l),.7);setTimeout(()=>sfx("laugh",voice(w)),700);
  slowMo=.25;setTimeout(()=>{slowMo=1},750);
+ l.dk=Math.random()<.5?"flydeath":"death";
  if(w.wins>=2){l.hp=0;l.daze=1;l.kd=0;S="finish";w.win=1;l.win=0;tm=w==A?330:150;banner(how,"","pop red");
   setTimeout(()=>{if(S=="finish"){banner("අවසන් කරන්න!","","pop red");$("#fprompt").classList.toggle("on",w==A)}},1100)}
  else{S="between";tm=190;banner(how,`${SIN[w.i]} වටය දිනයි`,"pop red")}}
@@ -262,15 +271,16 @@ let FX=null;
 function fin(n){const w=A.win?A:B,l=w==A?B:A;S="fatal";$("#fprompt").classList.remove("on");banner("");
  w.atk=l.atk=null;w.fx=0;P=[];w.vx=l.vx=0;w.face=l.x>w.x?1:-1;l.face=-w.face;
  if(n==0)w.x=Math.max(30,Math.min(770,l.x-w.face*75));
- FX={n,w,l,t:0,hit:n==0?impactF("grab")+4:n==1?impactF("fire")+22:impactF("cast"),end:n<0?200:230};
- w.cin={k:n==0?"grab":n==1?"fire":"cast",ts:n==0?TS.grab:n==1?TS.fire:TS.cast,off:ANIM.off[n==0?"grab":n==1?"fire":"cast"]};sfx("growl",voice(w),.8);if(n)sfx("cast")}
+ const ban=n==0?rnd(["grab","sthrow"]):0;
+ FX={n,w,l,t:0,hit:n==0?impactF(ban)+4:n==1?impactF("fire")+22:impactF("cast"),end:n<0?200:230};
+ const wa=n==0?ban:n==1?"fire":"cast";w.cin={k:wa,ts:TS[wa],off:ANIM.off[wa]};sfx("growl",voice(w),.8);if(n)sfx("cast")}
 function stepFin(){const{n,w,l}=FX,t=++FX.t;
  if(n==1&&t==FX.hit-22){P.push({x:w.x+w.face*40,y:w.y-60,vx:(l.x-w.x)/22,dmg:0,f:w,r:46,fx:1})}
  if(t==FX.hit){const hx=X(l.x),hy=Y(l.y)+1.1;
   if(n<0){sfx("bell");l.daze=0;l.hp=1;l.cin=null;sparks(hx,hy-.6,160,"gold",1.6);fx={x:l.x,c:0xffd070,t:0};banner("ශාන්තිය",`${SIN[w.i]} සමාව දෙයි`,"pop")}
   else{P=[];sfx("boom");sfx("hit",30,false);sfx("growl",voice(l),1.2);shake=.6;slowMo=.25;setTimeout(()=>slowMo=1,1400);
    sparks(hx,hy,260,true,2.6);sparks(hx,hy,90,false,2);if(n==1){sparks(hx,hy,200,false,3);l.vy=-13;l.vx=w.face*7}else l.vx=w.face*2;
-   l.daze=0;l.cin={k:"knock",ts:1.3,off:KN_IN};fx={x:l.x,c:0xff1010,t:0};banner(n?"මහා බිලි":"බිලි",w.d[6][n],"pop red")}}
+   l.daze=0;l.cin=n==1?{k:"flydeath",ts:1.2,off:.15}:{k:"knock",ts:1.3,off:KN_IN};fx={x:l.x,c:0xff1010,t:0};banner(n?"මහා බිලි":"බිලි",w.d[6][n],"pop red")}}
  if(t>FX.hit&&n>=0&&t%9==0&&t<FX.hit+90)sparks(X(l.x),Y(l.y)+.3,12,true,.6);
  for(const f of[w,l]){f.x=Math.max(30,Math.min(770,f.x+f.vx));f.vx*=.92;f.y+=f.vy;f.vy+=.6;if(f.y>=GY){f.y=GY;f.vy=0}}
  P=P.filter(p=>{p.x+=p.vx;return Math.abs(p.x-l.x)>20});
@@ -305,32 +315,36 @@ addEventListener("keydown",e=>{const K=e.key.toLowerCase();if([" ","arrowup","ar
 addEventListener("keyup",e=>k[e.key.toLowerCase()]=0);addEventListener("blur",()=>{for(const x in k)k[x]=0});
 function step(f,o){
  let L,Rt,U,blk,d=Math.abs(o.x-f.x);
- if(f.human){L=k.a||k.arrowleft;Rt=k.d||k.arrowright;U=k.w||k.arrowup;blk=k[" "]}
+ if(f.human){L=k.a||k.arrowleft;Rt=k.d||k.arrowright;U=k.w||k.arrowup;blk=k[" "];f.wcr=!!(k.s||k.arrowdown)}
  else{const D=DIFF[diff]||DIFF[1];
   L=d>90&&o.x<f.x;Rt=d>90&&o.x>f.x;U=Math.random()<.005;if(!o.atk)f.bk=Math.random()<D.blk;blk=o.atk&&f.bk&&d<110;
   if(S=="fight"&&f.cd<=0&&f.stun<=0&&f.roll<=0&&!(f.kd>0)){
    const hasProj=P.some(p=>p.f!==f&&Math.abs(p.x-f.x)<240);
-   if((hasProj||(o.atk&&d<120))&&Math.random()<D.blk*.35){
+   if(hasProj&&Math.random()<D.blk*.5){f.crT=40}
+   else if(o.atk?.low&&f.bk){f.crT=30}
+   else if((hasProj||(o.atk&&d<120))&&Math.random()<D.blk*.35){
     startRoll(f,o.x>f.x?-1:1);
    }else if(d>240&&Math.random()<D.atk*.15){
     startRoll(f,o.x>f.x?1:-1);
    }else if(Math.random()<D.atk){
     if(f.meter>=100&&Math.random()<D.sp)sup(f);
-    else if(Math.random()<D.sp&&f.sil<=0)use(f,o,rnd(f.d[7]));else if(d<90)basic(f,1+Math.random()*4|0)}}
+    else if(Math.random()<D.sp&&f.sil<=0)use(f,o,rnd(f.d[7]));
+    else if(d<110&&Math.random()<.18)slide(f);else if(d>90&&d<160&&Math.random()<.15)dropKick(f);else if(d<90)basic(f,1+Math.random()*4|0)}}
+  f.wcr=f.crT>0;if(f.crT>0)f.crT--;
  }
  if(f.comboT>0&&--f.comboT<=0){f.combo=0;if(f===A)$("#combo")?.classList.remove("on")}
- f.blk=!!blk&&f.y>=GY&&f.roll<=0&&!(f.kd>0);
+ f.blk=!!blk&&f.y>=GY&&f.roll<=0&&!(f.kd>0);f.cr=!!f.wcr&&f.y>=GY&&f.roll<=0&&!(f.kd>0)&&!f.atk&&f.dash<=0;
  for(const s of["cd","stun","pois","slow","rev","sil","buff","inv","flash","kd"])if(f[s]>0)f[s]--;
  if(f.pois>0&&f.pois%30==0)f.hp=Math.max(1,f.hp-1.5);
  if(f.roll>0){f.roll--;f.vx=f.rollDir*f.d[3]*1.85*(f.slow>0?.5:1)*(f.rev>0?.6:1)}
- else if(f.stun<=0&&f.dash<=0&&!(f.kd>0)&&S=="fight"){f.vx=(!!Rt-!!L)*f.d[3]*(f.slow>0?.5:1)*(f.rev>0?.6:1)*(f.blk?0:1);if(U&&f.y>=GY)f.vy=-12}
+ else if(f.stun<=0&&f.dash<=0&&!(f.kd>0)&&S=="fight"){f.vx=(!!Rt-!!L)*f.d[3]*(f.slow>0?.5:1)*(f.rev>0?.6:1)*(f.blk?0:f.cr?.45:1);if(U&&f.y>=GY&&!f.cr)f.vy=-12}
  if(f.dash>0){f.dash--;if(Math.sign(o.x-f.x)==f.face&&Math.abs(o.x-f.x)<50)f.vx=0}
  if(f.roll<=0&&!(f.kd>0)&&Math.abs(o.x-f.x)>8)f.face=o.x>f.x?1:-1;
  f.x=Math.max(30,Math.min(770,f.x+f.vx));f.y+=f.vy;f.vy+=.6;if(f.y>=GY){f.y=GY;f.vy=0}
  if(f.stun>0||f.kd>0)f.vx*=.9;
  if(f.pend&&--f.pend.t<=0){const p=f.pend;f.pend=null;p.fn()}
  const a=f.atk;if(a){a.t--;const e=a.t0-a.t;
-  if(!a.hit&&e>=a.hitAt&&e<=a.hitAt+a.win&&Math.abs(o.x-f.x-f.face*a.reach/2)<a.reach/2+20&&Math.abs(o.y-f.y)<70){a.hit=1;hurt(o,a.dmg,a.st,f);if(a.heal)f.hp=Math.min(f.max,f.hp+a.dmg*.7)}
+  if(!a.hit&&e>=a.hitAt&&e<=a.hitAt+a.win&&!(o.cr&&/^punch/.test(a.an))&&Math.abs(o.x-f.x-f.face*a.reach/2)<a.reach/2+20&&Math.abs(o.y-f.y)<70){a.hit=1;hurt(o,a.dmg,a.st,f);if(a.heal)f.hp=Math.min(f.max,f.hp+a.dmg*.7)}
   if(a.t<=0)f.atk=null}}
 function tick(){
  if(S=="intro"){if(--tm==45){banner("සටන!","","pop red");sfx("gong");sfx("growl",voice(A),.45)}if(tm<=0){S="fight";setTimeout(()=>S=="fight"&&banner(""),700)}return}
@@ -338,7 +352,7 @@ function tick(){
  if(S=="fight"){step(A,B);step(B,A);
   if(A.y>=GY&&B.y>=GY&&A.roll<=0&&B.roll<=0){const d=Math.abs(A.x-B.x);if(d<55){const o=(55-d)/2;if(A.x<B.x){A.x=Math.max(30,A.x-o);B.x=Math.min(770,B.x+o)}else{A.x=Math.min(770,A.x+o);B.x=Math.max(30,B.x-o)}}}
   P=P.filter(p=>{p.x+=p.vx;const t=p.f==A?B:A;
-   if(Math.abs(p.x-t.x)<25+p.r&&Math.abs(p.y-t.y+60)<60){if(t.inv>0)return 1;hurt(t,p.dmg,p.st,p.f);sfx("boom");return 0}return p.x>0&&p.x<800});
+   if(Math.abs(p.x-t.x)<25+p.r&&Math.abs(p.y-t.y+60)<60){if(t.inv>0||t.cr)return 1;hurt(t,p.dmg,p.st,p.f);sfx("boom");return 0}return p.x>0&&p.x<800});
   for(const[f,o]of[[A,B],[B,A]])if(f.hp<=0)return endRound(o,"බිම වැටුණා!");
   if(--timer<=0)return endRound(A.hp/A.max>=B.hp/B.max?A:B,"කාලය අවසන්")}
  if(S=="fatal")stepFin();
@@ -616,14 +630,17 @@ function normalizeHips(){const rest=ANIM.skel.getObjectByName("mixamorigHips").p
  for(const[k,c]of Object.entries(ANIM.clips)){const r=ANIM.rest[k],hp=c.tracks.find(t=>t.name=="mixamorigHips.position");if(!hp||!r||Math.abs(r/rest-1)<.1)continue;
   const s=rest/r,v=hp.values;for(let i=0;i<v.length;i++)v[i]*=s}}
 function measureImpacts(){ANIM.hit={};ANIM.off={};const sk=ANIM.skel.clone(),mx=new THREE.AnimationMixer(sk),hips=sk.getObjectByName("mixamorigHips"),v=V(),hv=V();
- for(const[k,limbs]of[["punch","Hand"],["punch2","Hand"],["kick","Foot"],["kick2","Foot"],["fire","Hand"],["cast","Hand"],["grab","Hand"],["fkick","Foot"]]){
+ for(const[k,limbs]of[["punch","Hand"],["punch2","Hand"],["kick","Foot"],["kick2","Foot"],["fire","Hand"],["cast","Hand"],["grab","Hand"],["fkick","Foot"],["knee","Hand"],["sthrow","Hand"],["dkick","Foot"],["slide","Foot"]]){
   const c=ANIM.clips[k],act=mx.clipAction(c);act.play();const bs=["Left","Right"].map(sd=>sk.getObjectByName("mixamorig"+sd+limbs));let best=-1e9,bt=.3;
   for(let t=0;t<=c.duration;t+=1/60){mx.setTime(t);sk.updateMatrixWorld(true);hips.getWorldPosition(hv);for(const b of bs){b.getWorldPosition(v);const r=v.z-hv.z+(limbs=="Foot"?(v.y-hv.y)*.5:0);if(r>best){best=r;bt=t}}}
-  act.stop();ANIM.hit[k]=bt;ANIM.off[k]=Math.max(0,bt-WIND[k])}}
+  act.stop();ANIM.hit[k]=k=="sthrow"?2.3:bt;ANIM.off[k]=Math.max(0,ANIM.hit[k]-WIND[k])}}  // shoulder throw: impact is the landing slam
 const ANIM={clips:{},rest:{}},AF={idle:"Fighting Idle",walk:"Standing Walk Forward",back:"Standing Walk Back",punch:"Cross Punch",punch2:"Hook Punch",kick:"Mma Kick",kick2:"Roundhouse Kick",
  block:"Center Block",jump:"Jump",hit:"Head Hit",death:"Dying",win:"Victory Idle",cast:"Spell Casting",fire:"Fireball",roll:"Falling To Roll",
- dizzy:"Injured Stumble Idle",knock:"Knocked Out",getup:"Getting Up",hitbody:"Stomach Hit",grab:"Grab And Slam",taunt:"Taunt",fkick:"Flying Kick"};
-function cleanClip(c,k){c.name=k;c.tracks=c.tracks.filter(t=>t.name.endsWith(".quaternion")||t.name=="mixamorigHips.position");
+ dizzy:"Injured Stumble Idle",knock:"Knocked Out",getup:"Getting Up",hitbody:"Stomach Hit",grab:"Grab And Slam",taunt:"Taunt",fkick:"Flying Kick",
+ flydeath:"Flying Back Death",knee:"Flying Knee Punch Combo",sthrow:"Flying Shoulder Throw",hurt:"Getting Hit",legs:"Hit On Legs",headfall:"Hit To Head",
+ hitreact:"Hit Reaction",dkick:"Drop Kick",froll:"Quick Roll To Run",froll2:"Sprinting Forward Roll",crouch:"Standing To Crouched",fall:"Falling Idle",sneak:"Sneak Walk",slide:"Running Slide"};
+function cleanClip(c,k){c.name=k;if(k=="crouch"){for(const t of c.tracks)t.trim(0,.57);c.duration=.57}  // clip loops back to standing on its last key
+ c.tracks=c.tracks.filter(t=>t.name.endsWith(".quaternion")||t.name=="mixamorigHips.position");
  const hp=c.tracks.find(t=>t.name=="mixamorigHips.position");if(hp){const v=hp.values;for(let i=0;i<v.length;i+=3){v[i]=v[0];v[i+2]=v[2];if(k=="jump")v[i+1]=v[1]}}return c}  // in place: the game moves fighters
 function play(m,k,once,ts=1,force,start=0){if(m.curK==k&&!force)return;const a=m.acts[k];if(!a)return;
  a.reset();a.time=start;a.setLoop(once?THREE.LoopOnce:THREE.LoopRepeat,Infinity);a.clampWhenFinished=!!once;a.timeScale=ts;
@@ -639,16 +656,16 @@ function pose(f,m,t,dt=1/60){const a=f.atk,moving=Math.abs(f.vx)>.2&&f.y>=GY;
  if(!f.keep)lerp(m.G,"y",f.face>0?Math.PI/2:-Math.PI/2);m.G.rotation.z=0;
  const hit=(f.flash||0)>(m.lf||0);m.lf=f.flash||0;
  if(f.cin)play(m,f.cin.k,1,f.cin.ts,0,f.cin.off||0);
- else if(f.hp<=0)f.daze?play(m,"dizzy"):play(m,"death",1);
+ else if(f.hp<=0)f.daze?play(m,"dizzy"):play(m,f.dk||"death",1);
  else if(f.win&&(S=="finish"||S=="over"||S=="fatal"))play(m,"win");
- else if(f.kd>0)(KD_F+KU_F-f.kd<KD_F)?play(m,"knock",1,KN_TS,0,KN_IN):play(m,"getup",1,GU_TS);
+ else if(f.kd>0)(f.kd0-f.kd<kdF(f.kdk))?play(m,f.kdk,1,KDK[f.kdk][2],0,KDK[f.kdk][0]):play(m,"getup",1,GU_TS);
  else if(S=="intro")play(m,"taunt",1,1.2);
- else if(f.roll>0)play(m,"roll",1,rollTS(),0,ROLL_IN);
+ else if(f.roll>0)play(m,f.rk||"roll",1,rollTSk(f.rk||"roll"),0,RC[f.rk||"roll"][0]);
  else if(a&&a!==m.la){m.la=a;play(m,a.an,1,a.ts,1,ANIM.off[a.an])}
  else if(f.fx)play(m,f.fx,1,TS[f.fx],1,ANIM.off[f.fx]);
- else if(hit&&!f.blk&&!a)play(m,f.hk?"hitbody":"hit",1,1.4,1);
- else if(m.curK=="death"||m.curK=="win"||!(m.once&&m.cur.isRunning()&&(a||f.pend||!TS[m.curK])))play(m,f.blk?"block":f.y<GY?"jump":f.stun>0?"dizzy":moving?(f.vx*f.face>0?"walk":"back"):"idle",f.blk||f.y<GY,1.4,m.curK=="death"||m.curK=="win");
- f.fx=0;if(m.curK=="walk"||m.curK=="back")m.cur.timeScale=Math.max(.7,Math.abs(f.vx)/1.6);
+ else if(hit&&!f.blk&&!a)play(m,f.hr||"hit",1,1.4,1);
+ else if(m.curK=="death"||m.curK=="win"||(m.curK=="jump"&&f.vy>0)||!(m.once&&m.cur.isRunning()&&(a||f.pend||!TS[m.curK])))play(m,f.blk?"block":f.y<GY?(f.vy>0?"fall":"jump"):f.stun>0?"dizzy":f.cr?(moving?"sneak":"crouch"):moving?(f.vx*f.face>0?"walk":"back"):f.hp/f.max<.25?"hurt":"idle",f.blk||(f.y<GY&&f.vy<=0)||(f.cr&&!moving),1.4,m.curK=="death"||m.curK=="win");
+ f.fx=0;if(m.curK=="walk"||m.curK=="back")m.cur.timeScale=Math.max(.7,Math.abs(f.vx)/1.6);if(m.curK=="sneak")m.cur.timeScale=Math.sign(f.vx*f.face||1)*Math.max(.8,Math.abs(f.vx)/1.1);
  m.mix.update(dt);retarget(m);
  for(const e of m.extra){lerp(e.sh,"x",-.3+Math.sin(t*2+e.j*1.3)*.3-(a?.9:0));lerp(e.sh,"z",e.s*(.35+.28*e.j));lerp(e.el,"x",-1.1+Math.sin(t*2.6+e.j)*.3)}
  for(const[o,ax,b,amp,sp]of m.anim)o.rotation[ax]=b+Math.sin(t*sp)*amp;
