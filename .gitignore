@@ -69,3 +69,14 @@ temp/
 *.blend2
 *.blend@
 
+
+# Yaksha Kombat project files
+# Raw Mixamo character downloads — the game loads the compressed models/characters/*.glb instead
+models/characters/*.fbx
+models/characters/*.fbm/
+# FBX2glTF texture extraction folders
+*.fbm/
+# Local test pages used while developing
+_t.html
+_p.html
+_g.html
