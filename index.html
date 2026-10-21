@@ -140,7 +140,7 @@ kbd.ar{font-size:1.15cqw}
 <div id=controls class="scr ov"><div class="panel wide"><h2>පාලන යතුරු</h2>
  <div class=cgrid>
   <div><h4>චලනය</h4><div class=crow>ඉදිරියට / පසුපසට<span><kbd>A</kbd><kbd>D</kbd> / <kbd class=ar>←</kbd><kbd class=ar>→</kbd></span></div><div class=crow>පැනීම<span><kbd>W</kbd> / <kbd class=ar>↑</kbd></span></div>
-   <div class=crow>නැමීම (අල්ලාගෙන)<span><kbd>S</kbd> / <kbd class=ar>↓</kbd></span></div><div class=crow>පෙරළීම (Roll)<span><kbd>Shift</kbd> / දෙවරක් <kbd class=ar>→</kbd> හෝ <kbd class=ar>←</kbd></span></div><div class=crow>ආරක්ෂාව (අල්ලාගෙන)<span><kbd>Space</kbd></span></div><div class=crow>විරාමය<span><kbd>Esc</kbd></span></div><div class=crow>ශබ්දය සක්‍රීය / අක්‍රීය<span><kbd>M</kbd></span></div></div>
+   <div class=crow>නැමීම (අල්ලාගෙන)<span><kbd>S</kbd> / <kbd class=ar>↓</kbd></span></div><div class=crow>පෙරළීම (Roll) / මගහැරීම<span><kbd>Shift</kbd> + <kbd class=ar>←</kbd> / <kbd class=ar>→</kbd> &nbsp;·&nbsp; <kbd>Shift</kbd></span></div><div class=crow>ආරක්ෂාව (අල්ලාගෙන)<span><kbd>Space</kbd></span></div><div class=crow>විරාමය<span><kbd>Esc</kbd></span></div><div class=crow>ශබ්දය සක්‍රීය / අක්‍රීය<span><kbd>M</kbd></span></div></div>
   <div><h4>ප්‍රහාර</h4><div class=crow>ඉදිරි අතින් පහර<span><kbd>J</kbd></span></div><div class=crow>පසු අතින් පහර<span><kbd>I</kbd></span></div><div class=crow>ඉදිරි පයින් පහර<span><kbd>K</kbd></span></div>
    <div class=crow>පසු පයින් පහර<span><kbd>L</kbd></span></div><div class=crow>ලිස්සා පහර (පහළ ප්‍රහාරය)<span><kbd class=ar>↓</kbd> + <kbd>K</kbd> / <kbd>L</kbd></span></div><div class=crow>පැනීමේ පා පහර<span><kbd class=ar>→</kbd> + <kbd>L</kbd></span></div><div class=crow>තොවිල් මහා ප්‍රහාරය (බලය පිරුණු විට)<span><kbd>O</kbd></span></div></div>
   <div class=cnote><b>විශේෂ ප්‍රහාර:</b> දිශා යතුරු ඔබා, පසුව ප්‍රහාර යතුර ඔබන්න — උදා. <kbd class=ar>↓</kbd><kbd class=ar>→</kbd><kbd>J</kbd>. ඊතල ප්‍රතිවාදියාට සාපේක්ෂයි: <kbd class=ar>→</kbd> යනු ප්‍රතිවාදියා දෙසටයි.
@@ -249,7 +249,7 @@ function use(f,o,m){const[,,ty,dmg,st]=m;f.cd=30;sfx("growl",voice(f),.45);if(!"
  else if(ty=="r"){melee(f,f.i%2?"knee":"fkick",{dmg,reach:70,st});f.atk.win=10;f.dash=f.atk.hitAt+6;f.vx=f.face*7}
  else if(ty=="a")melee(f,"kick2",{dmg,reach:130,st,aoe:1});
  else if(ty=="d")melee(f,"grab",{dmg,reach:90,st,heal:1,kd:1,rec:34});
- else{f.fx="cast";const hx=X(f.x),hy=Y(f.y);
+ else{f.fx="cast";f.nb=30;const hx=X(f.x),hy=Y(f.y);
   if(ty=="t"){sparks(hx,hy+1,70,"dark",1.8);f.x=Math.max(30,Math.min(770,o.x+(f.x<o.x?1:-1)*(minSep(f,o)+12)));f.face=-f.face;sparks(X(f.x),Y(f.y)+1,70,"dark",1.8);sfx("cast")}
   else if(ty=="b"){f.buff=300;sparks(hx,hy+.4,90,true,1.4);sparks(hx,hy+1.4,60,false,1.2)}
   else if(ty=="h"){f.inv=60;for(let j=0;j<12;j++)sparks(hx+Math.cos(j/12*6.28)*.6,hy+1.1+Math.sin(j/12*6.28)*.9,8,"gold",.6)}}}
@@ -291,10 +291,16 @@ function endRound(w,how){const l=w==A?B:A;w.wins++;l.atk=w.atk=null;P=[];sfx("go
 let FX=null;
 // collision: fighters are solid capsules of width m.w; they never overlap unless one is clearly above the other (jumping over)
 const bw=f=>f.m?.w||55,minSep=(a,b)=>(bw(a)+bw(b))/2;
-function separate(a,b){if(Math.abs(a.y-b.y)>95)return;const need=minSep(a,b),d=Math.abs(a.x-b.x);if(d>=need)return;
- const l=a.x<b.x||(a.x==b.x&&a.face>0)?a:b,r=l==a?b:a,push=(need-d)/2;
- l.x-=push;r.x+=push;if(l.x<30){r.x+=30-l.x;l.x=30}if(r.x>770){l.x-=r.x-770;r.x=770}
- for(const[f,o]of[[l,r],[r,l]])if(Math.sign(f.vx)==Math.sign(o.x-f.x))f.vx=0}
+// soft contact: overlap is resolved gradually (faster when deep), heavier bodies give way less,
+// and a fighter walking into a non-pushing opponent shoves them back at reduced speed
+function separate(a,b){const dy=Math.abs(a.y-b.y);if(dy>95)return;const need=minSep(a,b)*(dy>45?.75:1),d=Math.abs(a.x-b.x);if(d>=need)return;
+ const l=a.x<b.x||(a.x==b.x&&a.face>0)?a:b,r=l==a?b:a,over=need-d,lw=bw(l)*(l.max||100),rw=bw(r)*(r.max||100);
+ const lp=l.vx>.3,rp=r.vx<-.3;let sl=rw/(lw+rw),sr=lw/(lw+rw);
+ const shove=(pusher,pushed)=>Math.min(.85,.7*Math.max(.3,Math.min(1.25,pusher/pushed)));  // heavier pusher moves a lighter body easily, not the reverse
+ if(lp&&!rp){sr=shove(lw,rw);sl=1-sr}else if(rp&&!lp){sl=shove(rw,lw);sr=1-sl}
+ const k=over>10?1:.6;l.x-=over*sl*k;r.x+=over*sr*k;
+ if(l.x<30){r.x+=30-l.x;l.x=30}if(r.x>770){l.x-=r.x-770;r.x=770}
+ if(lp)l.vx*=.6;if(rp)r.vx*=.6}
 function fin(n){const w=A.win?A:B,l=w==A?B:A;S="fatal";$("#fprompt").classList.remove("on");netEv("fp",false);banner("");
  w.atk=l.atk=null;w.fx=0;P=[];w.vx=l.vx=0;w.face=l.x>w.x?1:-1;l.face=-w.face;
   const ban=n==0?rnd(["grab","sthrow","sthrow2","backflip"]):0;
@@ -327,20 +333,17 @@ addEventListener("keydown",e=>{const K=e.key.toLowerCase();if(e.target.tagName==
  if(NET?.role=="guest"&&A){if(FIGHTS.includes(S))netSend({t:"k",K,d:1});return}
  fightKey(A,B,K,k)});
 const FIGHTS=["intro","fight","between","finish","fatal","over"];
+function dirSpecial(f,o){if(f.cd>0||f.stun>0||f.kd>0||f.sil>0||f.y<GY)return false;const now=performance.now(),toks=f.buf.filter(t=>now-t[1]<700).map(t=>t[0]).join();
+ for(const m of f.d[7]){const p=m[1];if(/[0-9R]$/.test(p))continue;if(toks.endsWith(p)){f.buf=[];f.noJ=12;use(f,o,m);return true}}return false}
 function fightKey(f,o,K,kk){if(!f||!o)return;
  if(S=="finish"&&f.win){const n={j:0,i:1,k:-1}[K];if(n!==undefined)fin(n);return}
  if(S=="fight"&&f&&f.roll<=0&&f.stun<=0&&f.cd<=0&&f.y>=GY){
-  if(["a","arrowleft","d","arrowright"].includes(K)){
-   const isL=K=="a"||K=="arrowleft",now=performance.now();
-   if(f.tap.k==(isL?"L":"R")&&now-f.tap.t<300){f.tap={k:"",t:0};return startRoll(f,isL?-1:1)}
-   f.tap={k:isL?"L":"R",t:now};
-  }
   if(K=="shift"||K=="q"){
    const dir=(kk.a||kk.arrowleft)?-1:(kk.d||kk.arrowright)?1:0;
    return dir?startRoll(f,dir):dodge(f);
   }
  }
- const fw=f.face>0,dir={a:fw?"B":"F",arrowleft:fw?"B":"F",d:fw?"F":"B",arrowright:fw?"F":"B",s:"D",arrowdown:"D",w:"U",arrowup:"U"}[K];if(dir)f.buf.push([dir,performance.now()]);
+ const fw=f.face>0,dir={a:fw?"B":"F",arrowleft:fw?"B":"F",d:fw?"F":"B",arrowright:fw?"F":"B",s:"D",arrowdown:"D",w:"U",arrowup:"U"}[K];if(dir){f.buf.push([dir,performance.now()]);if(S=="fight"&&dirSpecial(f,o))return}
  const bt={j:"1",i:"2",k:"3",l:"4"," ":"R"}[K];if(bt&&S=="fight")press(bt,f,o,kk);
  if(K=="o"&&S=="fight")sup(f)}
 addEventListener("keyup",e=>{const K=e.key.toLowerCase();k[K]=0;if(NET?.role=="guest"&&A&&FIGHTS.includes(S))netSend({t:"k",K,d:0})});addEventListener("blur",()=>{for(const x in k)k[x]=0});
@@ -365,12 +368,12 @@ function step(f,o){
   f.wcr=f.crT>0;if(f.crT>0)f.crT--;
  }
  if(f.comboT>0&&--f.comboT<=0){f.combo=0;if(f===A)$("#combo")?.classList.remove("on")}
- f.blk=!!blk&&f.y>=GY&&f.roll<=0&&!(f.kd>0);f.cr=!!f.wcr&&f.y>=GY&&f.roll<=0&&!(f.kd>0)&&!f.atk&&f.dash<=0;
- for(const s of["cd","stun","pois","slow","rev","sil","buff","inv","flash","kd","dg"])if(f[s]>0)f[s]--;
+ f.blk=!!blk&&f.y>=GY&&f.roll<=0&&!(f.kd>0)&&!(f.nb>0);f.cr=!!f.wcr&&f.y>=GY&&f.roll<=0&&!(f.kd>0)&&!f.atk&&f.dash<=0;
+ for(const s of["cd","stun","pois","slow","rev","sil","buff","inv","flash","kd","dg","noJ","nb"])if(f[s]>0)f[s]--;
  if(f.pois>0&&f.pois%30==0)f.hp=Math.max(1,f.hp-1.5);
  if(f.roll>0){f.roll--;f.vx=f.rollDir*f.d[3]*1.85*(f.slow>0?.5:1)*(f.rev>0?.6:1)}
  else if(f.dg>0)f.vx=0;
- else if(f.stun<=0&&f.dash<=0&&!(f.kd>0)&&S=="fight"){f.vx=(!!Rt-!!L)*f.d[3]*(f.slow>0?.5:1)*(f.rev>0?.6:1)*(f.blk?0:f.cr?.45:1);if(U&&f.y>=GY&&!f.cr)f.vy=-12}
+ else if(f.stun<=0&&f.dash<=0&&!(f.kd>0)&&S=="fight"){f.vx=(!!Rt-!!L)*f.d[3]*(f.slow>0?.5:1)*(f.rev>0?.6:1)*(f.blk?0:f.cr?.45:1);if(U&&f.y>=GY&&!f.cr&&!(f.noJ>0))f.vy=-12}
  if(f.dash>0){f.dash--;if(Math.sign(o.x-f.x)==f.face&&Math.abs(o.x-f.x)<minSep(f,o)+4)f.vx=0}
  if(f.roll<=0&&!(f.kd>0)&&Math.abs(o.x-f.x)>8)f.face=o.x>f.x?1:-1;
  f.x=Math.max(30,Math.min(770,f.x+f.vx));f.y+=f.vy;f.vy+=.6;if(f.y>=GY){if(f.vy>0){f.airUsed=0;if(f.atk?.air)f.atk=null}f.y=GY;f.vy=0}
@@ -583,7 +586,7 @@ function body(i,ci){
  // attachment slot on a bone, oriented & scaled like the character frame at bind pose
  const slot=(n,x=0,y=0,z=0)=>{const bn=bone(n),g=new THREE.Group();bn.add(g);g.quaternion.copy(bn.getWorldQuaternion(new THREE.Quaternion())).invert();
   g.scale.setScalar(Gs/bn.getWorldScale(V()).y);return piv(g,x,y,z)};
- m.hipH=bone("Hips").getWorldPosition(V()).y;{const la=bone("LeftArm"),ra=bone("RightArm");m.w=la&&ra?Math.max(44,Math.min(86,la.getWorldPosition(V()).distanceTo(ra.getWorldPosition(V()))*60*2.4)):55}
+ m.hipH=bone("Hips").getWorldPosition(V()).y;{const la=bone("LeftArm"),ra=bone("RightArm");m.w=la&&ra?Math.max(38,Math.min(66,la.getWorldPosition(V()).distanceTo(ra.getWorldPosition(V()))*60*1.75)):48}
  const hipY=bone("Hips").getWorldPosition(V()).y/Gs,hip=slot("Hips"),ch=slot("Spine"),hd=slot("Head"),RH=slot("RightHand",-.08,-.02,0),LH=slot("LeftHand",.08,-.02,0);
  // mocap: a hidden Mixamo skeleton plays the clips; each bone's world rotation is copied onto this body (rest-pose corrected)
  const sk0=ANIM.skel.clone();G.add(sk0);sk0.updateMatrixWorld(true);sk0.scale.setScalar(bone("Hips").getWorldPosition(V()).y/sk0.getObjectByName("mixamorigHips").getWorldPosition(V()).y);sk0.updateMatrixWorld(true);
