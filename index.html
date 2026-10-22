@@ -216,9 +216,9 @@ function round(){slowMo=1;slowAcc=0;$("#combo")?.classList.remove("on");
  P=[];arena=rnd(ARENAS);buildArena(arena);fx=null;A.tr=B.tr=100;roundNo++;timer=99*60;S="intro";tm=110;
  banner(`${roundNo} වන වටය`,roundNo==3?"අවසාන වටය":"","pop");AU.mode="fight";sfx("roll");$("#arenaNm").textContent=arena[0]}
 function hurt(t,dmg,st,s){if(t.inv>0)return;
- const thr=!!s.atk?.kd,low=!!s.atk?.low,canBlk=t.blk&&!thr&&!(low&&!t.cr)&&!(s.atk?.air&&t.cr);if(canBlk&&Math.sign(s.x-t.x)==t.face)dmg*=.2;
+ const thr=!!s.atk?.kd,low=!!s.atk?.low,canBlk=t.blk&&!thr&&!(low&&!t.cr)&&!((s.atk?.air||s.atk?.over)&&t.cr);if(canBlk&&Math.sign(s.x-t.x)==t.face)dmg*=.2;
  const bl=dmg<1||canBlk;if(!bl){t.atk=null;t.pend=null;t.dash=0;t.roll=0;if(s){s.combo=(s.combo||0)+1;s.comboT=80;dmg*=(1+Math.min(s.combo-1,6)*.08);updCombo(s)}}
- sfx("hit",dmg,bl);if(!bl&&dmg>=10&&Math.random()<.6)sfx("growl",voice(t),.35);sparks(X(t.x),Y(t.y)+1.15,bl?8:18,!bl);t.hp-=dmg*(s.buff>0?1.5:1)*s.d[4];t.meter=Math.min(100,t.meter+dmg*2);t.flash=6;t.vx=s.face*3;shake=Math.min(.25,dmg*.012);const an=s.atk?.an||"";t.hr=/uppercut|headbutt/.test(an)?"upface":/kick|kneek|crescent|martelo/.test(an)?"hitbody":rnd(["hit","hitreact","takepunch"]);
+ sfx("hit",dmg,bl);if(!bl&&dmg>=10&&Math.random()<.6)sfx("growl",voice(t),.35);sparks(X(t.x),Y(t.y)+1.15,bl?8:18,!bl);t.hp-=dmg*(s.buff>0?1.5:1)*s.d[4];t.meter=Math.min(100,t.meter+dmg*2);t.flash=6;t.vx=s.face*3;shake=Math.min(.25,dmg*.012);const an=s.atk?.an||"";t.hr=/uppercut|headbutt/.test(an)?"upface":/kick|crescent|martelo/.test(an)?"hitbody":rnd(["hit","hitreact","takepunch"]);
  if(!bl&&t.hp>0&&(dmg>=14||s.atk?.kd||low))knock(t,s);
  if(st=="stun")t.stun=50;if(st=="poison")t.pois=180;if(st=="slow")t.slow=240;if(st=="rev")t.rev=240;if(st=="sil")t.sil=180}
 function dodge(f){if(f.roll>0||f.stun>0||f.cd>0||f.kd>0||f.y<GY||f.hp<=0)return;f.dg=34;f.cd=34;f.inv=26;f.atk=null;f.pend=null;f.vx=0;f.cr=false;sfx("swing",false,0)}
@@ -231,16 +231,16 @@ const TS={punch:1.5,punch2:1.5,kick:1.4,kick2:1.4,fire:1.5,cast:1.6,roll:1.8},RE
 // "Falling To Roll" clip: 0.25s dive start .. 1.5s back on feet; squeeze that span into the ROLL_F-frame dodge
 const ROLL_F=30,ROLL_IN=.25,ROLL_OUT=1.5,rollTS=()=>(Math.min(ROLL_OUT,ANIM.clips.roll?.duration??ROLL_OUT)-ROLL_IN)/(ROLL_F/60);
 // clips start WIND seconds before their impact, skipping slow mocap lead-ins
-const IMP={sthrow:2.3,sthrow2:4.1,kneek:.87,backflip:2.9,cast2:5.7,uppercut:1.75};  // impact times read from the clip measurements
-const WIND={punch:.3,punch2:.36,kick:.42,kick2:.5,fire:.6,cast:.5,grab:.45,fkick:.35,knee:.55,sthrow:2.3,dkick:.55,slide:.3,headbutt:.4,crescent:.5,kicking:.4,kneek:.4,sweep:.45,martelo:.35,quad:.3,stab:.4,uppercut:.6,backflip:2.9,sthrow2:1.6,cast2:1.4};
-Object.assign(TS,{airkick:1.1,airpunch:1.1,grab:1.8,fkick:1.4,knee:1.5,sthrow:1.6,dkick:1.4,slide:1.3,headbutt:1.5,crescent:1.5,kicking:1.4,kneek:1.5,sweep:1.4,martelo:1.3,quad:1.5,stab:1.5,uppercut:1.5,backflip:1.5,sthrow2:1.6,cast2:1.6,dodge:1.6});
+const IMP={sthrow:2.3,sthrow2:4.1,flipkick:1.02,backflip:2.9,cast2:5.7,uppercut:1.75};  // impact times read from the clip measurements
+const WIND={punch:.3,punch2:.36,kick:.42,kick2:.5,fire:.6,cast:.5,grab:.45,fkick:.35,knee:.55,sthrow:2.3,dkick:.55,slide:.3,headbutt:.4,crescent:.5,kicking:.4,flipkick:.55,mpunch:.35,martelo:.35,quad:.3,stab:.4,uppercut:.6,backflip:2.9,sthrow2:1.6,cast2:1.4};
+Object.assign(TS,{airkick:1.1,airpunch:1.1,grab:1.8,fkick:1.4,knee:1.5,sthrow:1.6,dkick:1.4,slide:1.3,headbutt:1.5,crescent:1.5,kicking:1.4,flipkick:1.4,mpunch:1.4,roar:1.4,martelo:1.3,quad:1.5,stab:1.5,uppercut:1.5,backflip:1.5,sthrow2:1.6,cast2:1.6,dodge:1.6});
 // knockdown: "Knocked Out" falls between 1.3s and 3.2s, "Getting Up" is upright by 1.8s
 const KN_IN=1.3,KN_END=3.2,KN_TS=2.2,GU_END=1.8,GU_TS=2.2,KD_F=Math.round((KN_END-KN_IN)/KN_TS*60),KU_F=Math.round(GU_END/GU_TS*60);
 // knockdown falls: [clip start, on-ground time, speed]; then "Getting Up"
 const KDK={knock:[KN_IN,KN_END,KN_TS],headfall:[.7,1.5,1.5],legs:[.35,1.3,1.5],sweepfall:[.85,1.9,1.5]},kdF=k=>Math.round((KDK[k][1]-KDK[k][0])/KDK[k][2]*60);
 // rolls: [clip start, back-on-feet time]; forward rolls use the sprint rolls
 const RC={roll:[ROLL_IN,ROLL_OUT],froll:[.1,1.3],froll2:[.08,1.12]};
-function knock(t,s,kind){const an=s.atk?.an||"";t.kdk=kind||(an=="slide"?"legs":an=="sweep"?"sweepfall":/punch|knee/.test(an)?"headfall":rnd(["knock","headfall"]));t.kd0=kdF(t.kdk)+KU_F;t.kd=t.kd0;t.inv=t.kd;t.cr=false;t.atk=null;t.pend=null;t.roll=0;t.dash=0;t.stun=0;t.vx=s.face*4;sfx("boom")}
+function knock(t,s,kind){const an=s.atk?.an||"";t.kdk=kind||(an=="slide"?rnd(["legs","sweepfall"]):/punch|knee/.test(an)?"headfall":rnd(["knock","headfall"]));t.kd0=kdF(t.kdk)+KU_F;t.kd=t.kd0;t.inv=t.kd;t.cr=false;t.atk=null;t.pend=null;t.roll=0;t.dash=0;t.stun=0;t.vx=s.face*4;sfx("boom")}
 const impactF=an=>Math.round(((ANIM.hit[an]??.3)-(ANIM.off[an]??0))/TS[an]*60);
 function melee(f,an,o){const h=impactF(an),T=h+(o.rec??REC);if(o.reach)sfx("swing",an.startsWith("kick"),(h-7)/60);f.atk={id:++AID,t:T,t0:T,hitAt:h,win:5,an,ts:TS[an],...o};f.cd=Math.max(f.cd,T-4)}
 function later(f,an,fn){f.fx=an;sfx("cast");setTimeout(()=>sfx("fire"),impactF(an)/60*1000);f.pend={t:impactF(an),fn};f.cd=Math.max(f.cd,impactF(an)+REC)}
@@ -254,10 +254,9 @@ function use(f,o,m){const[,,ty,dmg,st]=m;f.cd=30;sfx("growl",voice(f),.45);if(!"
   if(ty=="t"){sparks(hx,hy+1,70,"dark",1.8);f.x=Math.max(30,Math.min(770,o.x+(f.x<o.x?1:-1)*(minSep(f,o)+12)));f.face=-f.face;sparks(X(f.x),Y(f.y)+1,70,"dark",1.8);sfx("cast")}
   else if(ty=="b"){f.buff=300;sparks(hx,hy+.4,90,true,1.4);sparks(hx,hy+1.4,60,false,1.2)}
   else if(ty=="h"){f.inv=60;for(let j=0;j<12;j++)sparks(hx+Math.cos(j/12*6.28)*.6,hy+1.1+Math.sin(j/12*6.28)*.9,8,"gold",.6)}}}
-const STYLE={classic:["punch","punch2","kick","kick2"],brute:["punch","headbutt","kneek","crescent"],agile:["quad","uppercut","kicking","martelo"],blade:["quad","stab","kick","martelo"]};
+const STYLE={classic:["punch","punch2","kick","kick2"],brute:["mpunch","headbutt","kick","crescent"],agile:["quad","uppercut","kicking","flipkick"],blade:["quad","stab","kick","martelo"]};
 const STY=["brute","agile","blade","classic","agile","blade","brute","agile","classic","brute","classic","brute","agile","classic","agile","agile"];
-function basic(f,b){const an=STYLE[STY[f.i]||"classic"][b-1],close=an=="headbutt"||an=="kneek";melee(f,an,{dmg:b<3?6:8,reach:close?45:b<3?55:70})}
-function sweep(f){f.cr=false;melee(f,"sweep",{dmg:7,reach:75,low:1})}
+function basic(f,b){const an=STYLE[STY[f.i]||"classic"][b-1],close=an=="headbutt";melee(f,an,{dmg:b<3?6:8,reach:close?45:b<3?55:70,over:an=="flipkick"})}
 function slide(f){f.cr=false;melee(f,"slide",{dmg:9,reach:80,low:1});f.atk.win=14;f.dash=f.atk.hitAt+10;f.vx=f.face*6;sfx("swing",true,0)}
 function dropKick(f){melee(f,"dkick",{dmg:11,reach:85,kd:1,rec:30});f.dash=f.atk.hitAt;f.vx=f.face*4}
 function sup(f){if(f.meter<100)return;f.meter=0;sfx("growl",voice(f),.8);later(f,"fire",()=>P.push({x:f.x,y:f.y-60,vx:f.face*9,dmg:28,f,r:28}))}
@@ -267,7 +266,7 @@ function press(b,f=A,o=B,kk=k){if(f.stun>0||f.kd>0)return;if(f.y<GY-10&&b!="R")r
  const now=performance.now(),toks=f.buf.filter(t=>now-t[1]<700).map(t=>t[0]);
  for(const m of f.d[7]){const p=m[1].split(","),bt=p.pop();
   if(bt==b&&f.sil<=0&&toks.slice(-p.length).join()==p.join()){f.buf=[];return use(f,o,m)}}
- if(b=="3"||b=="4"){if(kk.s||kk.arrowdown)return b=="3"?sweep(f):slide(f);if(b=="4"&&(f.face>0?kk.d||kk.arrowright:kk.a||kk.arrowleft))return dropKick(f)}
+ if(b=="3"||b=="4"){if(kk.s||kk.arrowdown)return slide(f);if(b=="4"&&(f.face>0?kk.d||kk.arrowright:kk.a||kk.arrowleft))return dropKick(f)}
  if(b!="R")basic(f,+b)}
 let busy=0;
 async function start(){if(NET)return netPick();if(busy)return;busy=1;sfx("roll");const bi=Math.random()*R.length|0;let bc=0;if(bi==sel&&bc==selC)bc=1;
@@ -365,7 +364,7 @@ function step(f,o){
    }else if(Math.random()<D.atk){
     if(f.meter>=100&&Math.random()<D.sp)sup(f);
     else if(Math.random()<D.sp&&f.sil<=0)use(f,o,rnd(f.d[7]));
-    else if(d<110&&Math.random()<.18)(Math.random()<.5?sweep(f):slide(f));else if(d>90&&d<160&&Math.random()<.15)dropKick(f);else if(d<90)basic(f,1+Math.random()*4|0)}}
+    else if(d<110&&Math.random()<.18)slide(f);else if(d>90&&d<160&&Math.random()<.15)dropKick(f);else if(d<90)basic(f,1+Math.random()*4|0)}}
   f.wcr=f.crT>0;if(f.crT>0)f.crT--;
  }
  if(f.comboT>0&&--f.comboT<=0){f.combo=0;if(f===A)$("#combo")?.classList.remove("on")}
@@ -670,7 +669,7 @@ function normalizeHips(){const rest=ANIM.skel.getObjectByName("mixamorigHips").p
  for(const[k,c]of Object.entries(ANIM.clips)){const r=ANIM.rest[k],hp=c.tracks.find(t=>t.name=="mixamorigHips.position");if(!hp||!r||Math.abs(r/rest-1)<.1)continue;
   const s=rest/r,v=hp.values;for(let i=0;i<v.length;i++)v[i]*=s}}
 function measureImpacts(){ANIM.hit={};ANIM.off={};ANIM.reach={};const rest=ANIM.skel.getObjectByName("mixamorigHips").position.y;const sk=ANIM.skel.clone(),mx=new THREE.AnimationMixer(sk),hips=sk.getObjectByName("mixamorigHips"),v=V(),hv=V();
- for(const[k,limbs]of[["punch","Hand"],["punch2","Hand"],["kick","Foot"],["kick2","Foot"],["fire","Hand"],["cast","Hand"],["grab","Hand"],["fkick","Foot"],["knee","Hand"],["sthrow","Hand"],["dkick","Foot"],["slide","Foot"],["headbutt","Head"],["crescent","Foot"],["kicking","Foot"],["kneek","Foot"],["sweep","Foot"],["martelo","Foot"],["quad","Hand"],["stab","Hand"],["uppercut","Hand"],["backflip","Hand"],["sthrow2","Hand"],["cast2","Hand"]]){
+ for(const[k,limbs]of[["punch","Hand"],["punch2","Hand"],["kick","Foot"],["kick2","Foot"],["fire","Hand"],["cast","Hand"],["grab","Hand"],["fkick","Foot"],["knee","Hand"],["sthrow","Hand"],["dkick","Foot"],["slide","Foot"],["flipkick","Foot"],["mpunch","Hand"],["headbutt","Head"],["crescent","Foot"],["kicking","Foot"],["martelo","Foot"],["quad","Hand"],["stab","Hand"],["uppercut","Hand"],["backflip","Hand"],["sthrow2","Hand"],["cast2","Hand"]]){
   const c=ANIM.clips[k],act=mx.clipAction(c);act.play();const bs=(limbs=="Head"?[""]:["Left","Right"]).map(sd=>sk.getObjectByName("mixamorig"+sd+limbs)).filter(Boolean);let best=-1e9,bt=.3;
   const fwd=[];for(let t=0;t<=c.duration;t+=1/60){mx.setTime(t);sk.updateMatrixWorld(true);hips.getWorldPosition(hv);let f=-1e9;for(const b of bs){b.getWorldPosition(v);f=Math.max(f,v.z-hv.z);const r=v.z-hv.z+(limbs=="Foot"?(v.y-hv.y)*.5:0);if(r>best){best=r;bt=t}}fwd.push(f)}
   act.stop();ANIM.hit[k]=IMP[k]??bt;ANIM.off[k]=Math.max(0,ANIM.hit[k]-WIND[k]);ANIM.reach[k]=Math.max(.15,fwd[Math.min(fwd.length-1,Math.round(ANIM.hit[k]*60))]/rest)}}  // shoulder throw: impact is the landing slam
@@ -680,7 +679,7 @@ const ANIM={clips:{},rest:{}},AF={idle:"Fighting Idle",walk:"Standing Walk Forwa
  flydeath:"Flying Back Death",knee:"Flying Knee Punch Combo",sthrow:"Flying Shoulder Throw",hurt:"Getting Hit",legs:"Hit On Legs",headfall:"Hit To Head",
  hitreact:"Hit Reaction",dkick:"Drop Kick",froll:"Quick Roll To Run",froll2:"Sprinting Forward Roll",crouch:"Standing To Crouched",fall:"Falling Idle",sneak:"Sneak Walk",slide:"Running Slide",
  backflip:"Back Flip To Uppercut",cast2:"Casting Spell",dodge:"Dodging",idle2:"Fight Idle",headbutt:"Headbutt",crescent:"Inside Crescent Kick",jump2:"Jumping",
- kicking:"Kicking",kneek:"Knee Kick Lead",sweep:"Leg Sweep",martelo:"Martelo 2",quad:"Quad Punch",upface:"Receive Uppercut To The Face",
+ kicking:"Kicking",martelo:"Martelo 2",flipkick:"Flip Kick",mpunch:"Mutant Punch",roar:"Mutant Roaring",quad:"Quad Punch",upface:"Receive Uppercut To The Face",
  sthrow2:"Shoulder Throw, Aggressor",stab:"Stabbing",uppercut:"Surprise Uppercut",sweepfall:"Sweep Fall",takepunch:"Taking Punch"};
 function cleanClip(c,k){c.name=k;if(k=="crouch"){for(const t of c.tracks)t.trim(0,.57);c.duration=.57}  // clip loops back to standing on its last key
  c.tracks=c.tracks.filter(t=>t.name.endsWith(".quaternion")||t.name=="mixamorigHips.position");
@@ -700,9 +699,9 @@ function pose(f,m,t,dt=1/60){const a=f.atk,moving=Math.abs(f.vx)>.2&&f.y>=GY;
  const hit=(f.flash||0)>(m.lf||0);m.lf=f.flash||0;
  if(f.cin)play(m,f.cin.k,1,f.cin.ts,0,f.cin.off||0);
  else if(f.hp<=0)f.daze?play(m,"dizzy"):play(m,f.dk||"death",1);
- else if(f.win&&(S=="finish"||S=="over"||S=="fatal"))play(m,"win");
+ else if(f.win&&(S=="finish"||S=="over"||S=="fatal"))play(m,STY[f.i]=="brute"?"roar":"win");
  else if(f.kd>0)(f.kd0-f.kd<kdF(f.kdk))?play(m,f.kdk,1,KDK[f.kdk][2],0,KDK[f.kdk][0]):play(m,"getup",1,GU_TS);
- else if(S=="intro")play(m,"taunt",1,1.2);
+ else if(S=="intro")STY[f.i]=="brute"?play(m,"roar",1,1.6,0,.9):play(m,"taunt",1,1.2);
  else if(f.dg>0)play(m,"dodge",1,TS.dodge,0,.05);
  else if(f.roll>0)play(m,f.rk||"roll",1,rollTSk(f.rk||"roll"),0,RC[f.rk||"roll"][0]);
  else if(a&&a.id!==m.laId){m.laId=a.id;m.la=a;play(m,a.an,1,a.ts,1,ANIM.off[a.an])}
