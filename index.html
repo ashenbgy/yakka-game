@@ -66,6 +66,8 @@ kbd.ar{font-size:1.15cqw}
 .vsMid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:7cqw;font-weight:800;color:var(--g);text-shadow:0 0 3cqw rgba(197,29,38,.9);animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
 .vsLoad{position:absolute;bottom:4cqw;width:100%;text-align:center;font-size:.8cqw;letter-spacing:.4em;text-transform:uppercase;color:#9a8f7c;animation:pulse 1.1s infinite alternate}@keyframes pulse{to{opacity:.35}}
 .pl{position:absolute;top:1.8cqw;width:40cqw}.pl.l{left:2.6cqw}.pl.r{right:2.6cqw}
+.pn{font:700 1cqw var(--fb);color:var(--g2);margin-bottom:.15cqw;text-shadow:0 .1cqw .4cqw #000}.pl.r .pn{text-align:right}.pn:empty{display:none}
+#nmIn{display:block;margin:1.2cqw auto 0;width:22cqw;padding:.6cqw;text-align:center;font:600 1.5cqw var(--fb);color:#fff;background:rgba(0,0,0,.5);border:1px solid var(--ln);outline:none}#nmIn:focus{border-color:var(--g)}
 .nm{display:flex;align-items:baseline;gap:.8cqw;margin-bottom:.4cqw;text-shadow:0 .1cqw .4cqw #000}.pl.r .nm{flex-direction:row-reverse}
 .nm b{font:700 1.55cqw var(--fd);letter-spacing:.05em}.nm span{font-size:.85cqw;letter-spacing:.02em;text-transform:uppercase;color:var(--mut)}
 .hp{position:relative;height:1.45cqw;background:rgba(0,0,0,.65);border:1px solid rgba(232,185,74,.6);transform:skewX(-20deg);overflow:hidden}.pl.r .hp{transform:skewX(20deg)}
@@ -116,7 +118,7 @@ kbd.ar{font-size:1.15cqw}
 <div id=boot class="scr on"><div class=logo><h1>Yaksha <span>Kombat</span></h1></div><div class=loadbar><i id=bootBar></i></div><p id=bootTxt>යක්ෂයින් කැඳවමින්…</p></div>
 <div id=title class=scr><div class=vign></div>
  <div class=tpanel><div class=logo><h1>Yaksha <span>Kombat</span></h1><p class=tag>ලංකාදීපයේ යක්ෂයෝ</p></div>
- <nav class=menu><button data-a=play>සටන අරඹන්න</button><button data-a=lan>මිතුරා සමඟ සටන</button><button data-a=controls>පාලන යතුරු</button><button data-a=credits>ගෞරව නාමාවලිය</button><button data-a=diff>දුෂ්කරතාව: මධ්‍යම</button><button data-a=sound>ශබ්දය: සක්‍රීය</button></nav></div>
+ <nav class=menu><button data-a=play>සටන අරඹන්න</button><button data-a=lan>මිතුරා සමඟ සටන</button><button data-a=controls>පාලන යතුරු</button><button data-a=credits>ගෞරව නාමාවලිය</button><button data-a=diff>දුෂ්කරතාව: මධ්‍යම</button><button data-a=sound>ශබ්දය: සක්‍රීය</button><button data-a=name>නම: —</button></nav></div>
  <div class=dev>Developed by <b>Ashenbgy</b></div>
  <div class=hint><kbd class=ar>↑</kbd><kbd class=ar>↓</kbd><span>තෝරන්න</span><kbd>Enter</kbd><span>තහවුරු කරන්න</span></div></div>
 <div id=select class=scr><div class=vign></div><div class=stitle>ඔබේ සටන්කරුවා තෝරන්න<small>වට තුනෙන් දෙකක් · පරිගණකයට එරෙහිව</small></div><div id=sLoad>කැඳවමින්…</div>
@@ -128,7 +130,7 @@ kbd.ar{font-size:1.15cqw}
  <div class=hint><kbd class=ar>←</kbd><kbd class=ar>→</kbd><span>සටන්කරුවා</span><kbd>C</kbd><span>ඇඳුම</span><kbd>Enter</kbd><span>සටනට</span><kbd>Esc</kbd><span>ආපසු</span></div></div>
 <div id=vs class=scr><div class="vsSide l"><small>ක්‍රීඩකයා</small><b id=vsA></b><i id=vsAs></i><em id=vsAc></em></div><div class=vsMid>VS</div><div class="vsSide r"><small>පරිගණකය</small><b id=vsB></b><i id=vsBs></i><em id=vsBc></em></div><p class=vsLoad>සටන් බිම සූදානම් වෙමින්…</p></div>
 <div id=hud class=scr>
- <div class="pl l" id=p1><div class=nm><b></b><span></span></div><div class=hp><i class=tr></i><i class=fl></i></div><div class=row><div class=mt><i></i><span>තොවිල් බලය</span></div><div class=pips></div></div><div class=st></div></div>
+ <div class="pl l" id=p1><div class=pn></div><div class=nm><b></b><span></span></div><div class=hp><i class=tr></i><i class=fl></i></div><div class=row><div class=mt><i></i><span>තොවිල් බලය</span></div><div class=pips></div></div><div class=st></div></div>
  <div class=clock><b id=tmr>99</b><small id=arenaNm></small></div>
  <div id=banner><div class=b1></div><div class=b2></div></div>
  <div id=combo><b></b><small></small></div>
@@ -137,6 +139,9 @@ kbd.ar{font-size:1.15cqw}
 <div id=lan class="scr ov"><div class=panel><h2>මිතුරා සමඟ සටන</h2><p id=lanMsg class=lanmsg></p><div id=lanCode class=lancode></div>
  <input id=lanIn maxlength=4 inputmode=numeric autocomplete=off placeholder="කාමර අංකය">
  <nav class=menu><button data-a=lanhost>සටනක් සාදන්න</button><button data-a=lanjoin>සටනකට එක්වන්න</button><button data-a=lanback>ආපසු</button></nav></div></div>
+<div id=nameov class="scr ov"><div class=panel><h2>ඔබේ නම</h2><p class=lanmsg>සටන් අතරතුර සහ මිතුරන් සමඟ සටනේදී මෙම නම පෙන්වයි.</p>
+ <input id=nmIn maxlength=16 autocomplete=off spellcheck=false placeholder="නම ඇතුළත් කරන්න">
+ <nav class=menu><button data-a=nameok>හරි</button><button data-a=nameback>ආපසු</button></nav></div></div>
 <div id=pause class="scr ov"><div class=panel><h2>විරාමය</h2><div id=pauseMoves></div><nav class=menu><button data-a=resume>නැවත අරඹන්න</button><button data-a=controls>පාලන යතුරු</button><button data-a=sound>ශබ්දය: සක්‍රීය</button><button data-a=select>සටන්කරුවා තෝරන්න</button><button data-a=title>ප්‍රධාන මෙනුව</button></nav></div></div>
 <div id=controls class="scr ov"><div class="panel wide"><h2>පාලන යතුරු</h2>
  <div class=cgrid>
@@ -273,9 +278,9 @@ function press(b,f=A,o=B,kk=k){if(f.stun>0||f.kd>0||f.hs>0)return;if(f.y<GY-10&&
  if(b!="R")basic(f,+b)}
 let busy=0;
 async function start(){if(NET)return netPick();if(busy)return;busy=1;sfx("roll");const bi=Math.random()*R.length|0;let bc=0;if(bi==sel&&bc==selC)bc=1;
- S="vs";base("vs");$("#vs .vsSide.l small").textContent="ක්‍රීඩකයා";$("#vs .vsSide.r small").textContent="පරිගණකය";for(const[p,i,c]of[["A",sel,selC],["B",bi,bc]]){$("#vs"+p).textContent=SIN[i];$("#vs"+p+"s").textContent=R[i][0];$("#vs"+p+"c").textContent=cosName(i,c)}
+ S="vs";base("vs");$("#vs .vsSide.l small").textContent=PNAME||"ක්‍රීඩකයා";$("#vs .vsSide.r small").textContent="පරිගණකය";for(const[p,i,c]of[["A",sel,selC],["B",bi,bc]]){$("#vs"+p).textContent=SIN[i];$("#vs"+p+"s").textContent=R[i][0];$("#vs"+p+"c").textContent=cosName(i,c)}
  const t0=performance.now();await Promise.all([ready(sel,selC),ready(bi,bc)]);await new Promise(r=>setTimeout(r,Math.max(0,1600-(performance.now()-t0))));
- A=mk(sel,200,1,1);B=mk(bi,600,-1,0);A.c=selC;B.c=bc;busy=0;
+ A=mk(sel,200,1,1);B=mk(bi,600,-1,0);A.c=selC;B.c=bc;A.pn=PNAME;B.pn="පරිගණකය";busy=0;
  for(const f of[A,B]){f.m=body(f.i,f.c);scene.add(f.m.root)}if(prev)scene.remove(prev.root);roundNo=0;base("hud");hudInit();round()}
 function toSelect(){paused=false;$("#sLoad").classList.remove("on");$("#sLoad").textContent="කැඳවමින්…";if(NET)NET.picks={};AU.mode="menu";if(AU.c)AU.mus.gain.setTargetAtTime(.32,now(),.1);overlay(null);banner("");if(A){for(const f of[A,B])drop(f.m);A=B=null;P=[]}S="select";base("select");updSelect();
  if(prev)scene.add(prev.root);else preview();buildArena(ARENAS[0])}
@@ -289,7 +294,7 @@ function endRound(w,how){const l=w==A?B:A;w.wins++;l.atk=w.atk=null;P=[];sfx("go
  l.dk=Math.random()<.5?"flydeath":"death";
  if(w.wins>=2){l.hp=0;l.daze=1;l.kd=0;S="finish";w.win=1;l.win=0;tm=w==A||NET?330:150;banner(how,"","pop red");
   setTimeout(()=>{if(S=="finish"){banner("අවසන් කරන්න!","","pop red");$("#fprompt").classList.toggle("on",w==A);netEv("fp",w==B)}},1100)}
- else{S="between";tm=190;banner(how,`${SIN[w.i]} වටය දිනයි`,"pop red")}}
+ else{S="between";tm=190;banner(how,`${w.pn||SIN[w.i]} වටය දිනයි`,"pop red")}}
 // finishers: n=0 Bili (grab & slam), n=1 Maha Bili (giant fireball), n=-1 Shanthi (mercy)
 let FX=null;
 // collision: fighters are solid capsules of width m.w; they never overlap unless one is clearly above the other (jumping over)
@@ -322,9 +327,9 @@ function stepFin(){const{n,w,l}=FX,t=++FX.t;
  for(const f of[w,l]){f.x=Math.max(30,Math.min(770,f.x+f.vx));f.vx*=.92;f.y+=f.vy;f.vy+=.6;if(f.y>=GY){f.y=GY;f.vy=0}}
  P=P.filter(p=>{p.x+=p.vx;return Math.abs(p.x-l.x)>20});
  if(t>=FX.end){S="over";tm=1;w.cin=null}}
-function results(){netEv("results");banner("");AU.mode="menu";sfx(A.win?"laugh":"gong",voice(A));$("#rTop").textContent=A.win?"ජයග්‍රහණය":"පරාජය";$("#rTitle").textContent=SIN[(A.win?A:B).i]+" ජය ගනී";
- $("#rSub").textContent=`${SIN[A.i]}  ${A.wins} – ${B.wins}  ${SIN[B.i]}`;overlay("results")}
-addEventListener("keydown",e=>{const K=e.key.toLowerCase();if(e.target.tagName=="INPUT"){if(K=="enter")act("lanjoin");if(K=="escape")act("lanback");return}if([" ","arrowup","arrowdown","arrowleft","arrowright"].includes(K))e.preventDefault();if(e.repeat)return;k[K]=1;auInit();
+function results(){netEv("results");banner("");AU.mode="menu";sfx(A.win?"laugh":"gong",voice(A));const me=NET?.role=="guest"?B:A,wn=A.win?A:B;$("#rTop").textContent=me.win?"ජයග්‍රහණය":"පරාජය";$("#rTitle").textContent=(wn.pn?wn.pn+" ("+SIN[wn.i]+")":SIN[wn.i])+" ජය ගනී";
+ $("#rSub").textContent=`${A.pn||SIN[A.i]}  ${A.wins} – ${B.wins}  ${B.pn||SIN[B.i]}`;overlay("results")}
+addEventListener("keydown",e=>{const K=e.key.toLowerCase();if(e.target.tagName=="INPUT"){const nm=e.target.id=="nmIn";if(K=="enter")act(nm?"nameok":"lanjoin");if(K=="escape")act(nm?"nameback":"lanback");return}if([" ","arrowup","arrowdown","arrowleft","arrowright"].includes(K))e.preventDefault();if(e.repeat)return;k[K]=1;auInit();
  if(K=="m")return setSound(!AU.on);
  if(S=="boot"||S=="vs")return;
  if(K=="escape"){if(ovId=="controls"||ovId=="credits")return act("back");if(ovId=="pause")return setPause(false);if(["intro","fight","between","finish"].includes(S)&&!ovId)return setPause(true);if(S=="select"){sfx("back");return toTitle()}return}
@@ -914,12 +919,12 @@ function lanAct(a){
  return 0}
 function netDo(a){netSend({t:"act",a});if(a=="rematch"){overlay(null);rematch()}else if(a=="select"){NET.picks={};toSelect()}}
 function netPick(){const me=[sel,selC];$("#sLoad").textContent="ප්‍රතිවාදියා තෝරන තෙක් රැඳී සිටින්න…";$("#sLoad").classList.add("on");sfx("ok");
- if(NET.role=="host"){NET.picks.h=me;netTryStart()}else netSend({t:"pick",i:sel,c:selC})}
-function netTryStart(){const{h,g}=NET.picks;if(!h||!g)return;NET.picks={};if(h[0]==g[0]&&h[1]==g[1])g[1]=(g[1]+1)%3;netSend({t:"go",h,g});netMatch(h,g)}
-async function netMatch(h,g){S="vs";base("vs");$("#sLoad").classList.remove("on");$("#sLoad").textContent="කැඳවමින්…";
- for(const[p,[i,c],who]of[["A",h,"ක්‍රීඩකයා 1"],["B",g,"ක්‍රීඩකයා 2"]]){$("#vs"+p).textContent=SIN[i];$("#vs"+p+"s").textContent=R[i][0];$("#vs"+p+"c").textContent=cosName(i,c);$(`#vs .vsSide.${p=="A"?"l":"r"} small`).textContent=who}
+ if(NET.role=="host"){NET.picks.h=me;NET.picks.hn=PNAME;netTryStart()}else netSend({t:"pick",i:sel,c:selC,n:PNAME})}
+function netTryStart(){const{h,g,hn,gn}=NET.picks;if(!h||!g)return;NET.picks={};if(h[0]==g[0]&&h[1]==g[1])g[1]=(g[1]+1)%3;netSend({t:"go",h,g,hn,gn});netMatch(h,g,hn,gn)}
+async function netMatch(h,g,hn,gn){hn=hn||"ක්‍රීඩකයා 1";gn=gn||"ක්‍රීඩකයා 2";S="vs";base("vs");$("#sLoad").classList.remove("on");$("#sLoad").textContent="කැඳවමින්…";
+ for(const[p,[i,c],who]of[["A",h,hn],["B",g,gn]]){$("#vs"+p).textContent=SIN[i];$("#vs"+p+"s").textContent=R[i][0];$("#vs"+p+"c").textContent=cosName(i,c);$(`#vs .vsSide.${p=="A"?"l":"r"} small`).textContent=who}
  await Promise.all([ready(...h),ready(...g)]);
- A=mk(h[0],200,1,1);B=mk(g[0],600,-1,1);A.c=h[1];B.c=g[1];B.kb=RK;for(const x in RK)RK[x]=0;
+ A=mk(h[0],200,1,1);B=mk(g[0],600,-1,1);A.c=h[1];B.c=g[1];A.pn=hn;B.pn=gn;B.kb=RK;for(const x in RK)RK[x]=0;
  for(const f of[A,B]){f.m=body(f.i,f.c);scene.add(f.m.root)}if(prev)scene.remove(prev.root);roundNo=0;base("hud");hudInit();
  if(NET.role=="host"){if(!NET.gl)await new Promise(r=>NET.onLoaded=r);NET.gl=false;NET.onLoaded=null;round()}else netSend({t:"loaded"})}
 const FSYNC=["x","y","vx","vy","face","hp","meter","wins","win","blk","cr","roll","rk","dg","kd","kd0","kdk","stun","flash","hr","cin","daze","dk","inv","buff","pois","slow","rev","sil"];
@@ -942,12 +947,12 @@ function netMsg(m){
  else if(m.t=="left"){netClose();netLost()}
  else if(NET?.role=="host"){
   if(m.t=="k"){RK[m.K]=m.d;if(m.d&&B&&FIGHTS.includes(S))fightKey(B,A,m.K,RK)}
-  else if(m.t=="pick"){NET.picks.g=[m.i,m.c];netTryStart()}
+  else if(m.t=="pick"){NET.picks.g=[m.i,m.c];NET.picks.gn=String(m.n||"").slice(0,16);netTryStart()}
   else if(m.t=="loaded"){NET.gl=true;NET.onLoaded?.()}
   else if(m.t=="req")netDo(m.a)}
  else if(NET?.role=="guest"){
   if(m.t=="st"){(NET.evq||=[]).push(...m.ev);m.fs.forEach((o,j)=>{if(o.fx)(NET.fxq||=[])[j]=o.fx});NET.st=m}
-  else if(m.t=="go")netMatch(m.h,m.g);
+  else if(m.t=="go")netMatch(m.h,m.g,m.hn,m.gn);
   else if(m.t=="act"){if(m.a=="rematch")overlay(null);else if(m.a=="select")toSelect()}}}
 
 // ---------- UI (HTML overlay) ----------
@@ -964,7 +969,14 @@ const activeMenu=()=>$(`#${ovId||baseId} .menu`);
 function menuSel(m,i){const b=[...m.children];i=(i+b.length)%b.length;b.forEach((x,j)=>x.classList.toggle("sel",j==i));m.dataset.i=i}
 function menuReset(){const m=activeMenu();if(m)menuSel(m,0)}
 $$(".menu button").forEach(b=>{b.onmouseenter=()=>{const m=b.parentNode,i=[...m.children].indexOf(b);if(+m.dataset.i!==i){menuSel(m,i);sfx("tick")}};b.onclick=()=>act(b.dataset.a)});
-function act(a){if(a=="sound")return setSound(!AU.on);if(lanAct(a))return;
+let PNAME=(()=>{try{return localStorage.getItem("yk-name")||""}catch(e){return ""}})(),nameNext=null;
+function nameLabel(){$$("[data-a=name]").forEach(b=>b.textContent="නම: "+(PNAME||"—"))}
+function askName(next){nameNext=next;$("#nmIn").value=PNAME;overlay("nameov");setTimeout(()=>$("#nmIn").focus(),50)}
+function act(a){if(a=="sound")return setSound(!AU.on);
+ if(a=="name")return askName(null);
+ if(a=="nameok"){const v=$("#nmIn").value.trim().replace(/\s+/g," ").slice(0,16);if(!v){$("#nmIn").focus();return}PNAME=v;try{localStorage.setItem("yk-name",v)}catch(e){}nameLabel();overlay(null);sfx("ok");const n=nameNext;nameNext=null;if(n)act(n);return}
+ if(a=="nameback"){nameNext=null;overlay(null);return}
+ if((a=="play"||a=="lan")&&!PNAME)return askName(a);if(lanAct(a))return;
  if(a=="diff"){diff=(diff+1)%DIFF.length;$$("[data-a=diff]").forEach(b=>b.textContent="දුෂ්කරතාව: "+DIFF[diff].name);sfx("tick");return}
  sfx(a=="back"||a=="resume"?"back":"ok");if(a=="play"){S="select";base("select");updSelect()}else if(a=="controls"||a=="credits"){ctlBack=ovId;overlay(a)}else if(a=="back")overlay(ctlBack);
  else if(a=="resume")setPause(false);else if(a=="select")toSelect();else if(a=="title")toTitle();else if(a=="rematch")rematch()}
@@ -980,9 +992,9 @@ function updSelect(){const r=R[sel];$("#sSin").textContent=r[0];$("#sName").text
  $$(".card").forEach((e,i)=>e.classList.toggle("sel",i==sel))}
 // fight HUD
 const p2=$("#p1").cloneNode(true);p2.id="p2";p2.className="pl r";$("#hud").insertBefore(p2,$(".clock"));
-const hudRef=el=>({fl:el.querySelector(".fl"),tr:el.querySelector(".tr"),mt:el.querySelector(".mt i"),mtb:el.querySelector(".mt"),pips:el.querySelector(".pips"),st:el.querySelector(".st"),nm:el.querySelector(".nm b"),cs:el.querySelector(".nm span")});
+const hudRef=el=>({fl:el.querySelector(".fl"),tr:el.querySelector(".tr"),mt:el.querySelector(".mt i"),mtb:el.querySelector(".mt"),pips:el.querySelector(".pips"),st:el.querySelector(".st"),nm:el.querySelector(".nm b"),cs:el.querySelector(".nm span"),pn:el.querySelector(".pn")});
 const H1=hudRef($("#p1")),H2=hudRef(p2),tmr=$("#tmr"),fbar=$("#fbar");
-function hudInit(){for(const[f,h]of[[A,H1],[B,H2]]){h.nm.textContent=SIN[f.i];h.cs.textContent=cosName(f.i,f.c)}}
+function hudInit(){for(const[f,h]of[[A,H1],[B,H2]]){h.pn.textContent=f.pn||"";h.nm.textContent=SIN[f.i];h.cs.textContent=cosName(f.i,f.c)}}
 function hudUpd(){if(!A)return;
  for(const[f,h]of[[A,H1],[B,H2]]){const p=Math.max(0,f.hp)/f.max*100;f.tr=Math.max(p,(f.tr??100)-.35);h.fl.style.width=p+"%";h.tr.style.width=f.tr+"%";
   h.mt.style.width=f.meter+"%";h.mtb.classList.toggle("full",f.meter>=100);const pips="◆".repeat(f.wins)+"◇".repeat(Math.max(0,2-f.wins));if(h.pips.textContent!=pips)h.pips.textContent=pips;
@@ -1023,6 +1035,6 @@ Promise.all([...["male","female"].map(n=>new GLTFLoader().loadAsync("models/"+n+
  ...Object.entries(AF).map(([k,n])=>new FBXLoader().loadAsync(encodeURI(`models/anims/${n}.fbx`)).then(o=>{ANIM.clips[k]=cleanClip(o.animations[0],k);ANIM.rest[k]=o.getObjectByName("mixamorigHips")?.position.y;if(k=="idle")ANIM.skel=o}))]).then(([a,b,hdr])=>{BASE.male=a;BASE.female=b;normalizeHips();measureImpacts();
  for(const[k,src,start]of[["airkick","fkick",.3],["airpunch","knee",1.12]]){const c=ANIM.clips[src].clone();c.name=k;const hp=c.tracks.find(t=>t.name=="mixamorigHips.position");
   if(hp){const v=hp.values,y0=v[1];for(let i=1;i<v.length;i+=3)v[i]=y0}ANIM.clips[k]=c;ANIM.off[k]=start}ARENAS.forEach(a=>a[5]&&bgTex(a[5]));
- setSound(AU.on);envTex=pmrem.fromEquirectangular(hdr).texture;scene.environment=envTex;hdr.dispose();S="title";base("title");updSelect();preview();buildArena(ARENAS[0]);loop()})
+ setSound(AU.on);nameLabel();envTex=pmrem.fromEquirectangular(hdr).texture;scene.environment=envTex;hdr.dispose();S="title";base("title");updSelect();preview();buildArena(ARENAS[0]);loop()})
  .catch(e=>{console.error(e);$("#bootTxt").textContent="ක්‍රීඩා ගොනු පූරණය කළ නොහැක — මෙම ෆෝල්ඩරය HTTP සේවාදායකයක් හරහා විවෘත කරන්න (python3 -m http.server)"});
 </script>
