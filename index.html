@@ -56,7 +56,7 @@ kbd.ar{font-size:1.15cqw}
 .go{all:unset;cursor:pointer;display:block;width:100%;margin-top:1.3cqw;text-align:center;padding:.75cqw;font-size:1.4cqw;font-weight:700;letter-spacing:.3em;text-transform:uppercase;background:linear-gradient(#d72a32,#8c1118);border:1px solid #ff7b6b}
 .go:hover{filter:brightness(1.15)}.go kbd{margin-left:.8cqw}
 #sLoad{position:absolute;left:14cqw;top:48%;font-size:.8cqw;letter-spacing:.35em;text-transform:uppercase;color:var(--g);opacity:0;transition:opacity .2s}#sLoad.on{opacity:1;animation:pulse 1s infinite alternate}
-.roster{position:absolute;left:3cqw;right:3cqw;bottom:4.4cqw;display:grid;grid-template-columns:repeat(16,1fr);gap:.3cqw}
+.roster{position:absolute;left:3cqw;right:3cqw;bottom:4.4cqw;display:grid;grid-template-columns:repeat(12,1fr);gap:.3cqw}
 .card{position:relative;height:5.2cqw;cursor:pointer;background:linear-gradient(165deg,var(--c),#0b0806 80%);border:1px solid rgba(255,255,255,.12);border-top:.2cqw solid var(--c);display:flex;align-items:flex-end;padding:.35cqw;font:600 .78cqw var(--fb);line-height:1.3;color:#e9e2d4;transition:transform .15s,box-shadow .15s}
 .card:hover{transform:translateY(-.25cqw)}.card.sel{border-color:var(--g);box-shadow:0 0 1cqw rgba(232,185,74,.55),inset 0 0 0 1px var(--g);transform:translateY(-.5cqw);color:#fff}
 #vs{background:linear-gradient(105deg,#3a080b 0 49.6%,#000 49.6% 50.4%,#071433 50.4%)}
@@ -155,7 +155,7 @@ kbd.ar{font-size:1.15cqw}
 <div id=credits class="scr ov"><div class="panel wide"><h2>ගෞරව නාමාවලිය</h2>
  <div class=devbig>Developed by<b>Ashenbgy</b></div>
  <div class=cgrid>
-  <div><h4>චරිත සහ සජීවිකරණ</h4><div class=crow>3D චරිත<span>Mixamo (Adobe)</span></div><div class=crow>සටන් චලන (motion capture)<span>Mixamo (Adobe)</span></div><div class=crow>මූලික මානව ආකෘති<span>three.js examples</span></div><div class=crow>සංගීතය: “Drums in the Deepwood”<span>Elyvilon (CC-BY 4.0)</span></div></div>
+  <div><h4>චරිත සහ සජීවිකරණ</h4><div class=crow>3D චරිත<span>Mixamo (Adobe)</span></div><div class=crow>සටන් චලන (motion capture)<span>Mixamo (Adobe)</span></div><div class=crow>මූලික මානව ආකෘති<span>three.js examples</span></div><div class=crow>සංගීතය: “Drums in the Deepwood”<span>Elyvilon (CC-BY 4.0)</span></div><div class=crow>Sema Demon (3D)<span>krit yamsaso · CC-BY 4.0</span></div><div class=crow>Biped Robot (3D)<span>Willy Decarpentrie · CC-BY 4.0</span></div></div>
   <div><h4>පරිසරය සහ තාක්ෂණය</h4><div class=crow>රාත්‍රී ආලෝකය සහ වයනය<span>Poly Haven (CC0)</span></div><div class=crow>3D එන්ජිම<span>three.js</span></div><div class=crow>අකුරු<span>Gemunu Libre · Yaldevi (Mooniak)</span></div></div></div>
  <nav class=menu><button data-a=back>ආපසු</button></nav></div></div>
 <div id=results class="scr ov"><div class=panel><small id=rTop></small><h2 id=rTitle></h2><p id=rSub></p><nav class=menu><button data-a=rematch>නැවත සටන</button><button data-a=select>සටන්කරුවා තෝරන්න</button><button data-a=title>ප්‍රධාන මෙනුව</button></nav></div></div>
@@ -199,7 +199,9 @@ const R=[
 ["Kola Yaka","#38c",90,3.4,1,"අහස් වීරයා",["ගොදුර","වලාකුළු අතරින්"],[["පිහාටු ඊතල","D,F,1","p",9],["පියාපත් සුළඟ","B,B,3","a",6,"slow"]]],
 ["Sohon Yaka","#733",100,2.2,1.2,"මරණ දණ්ඩනයා",["ඔබේ කාලය ලියැවී ඇත","අවසන් හුස්ම"],[["මරණ මල් පෙති","D,F,1","p",12],["ඉරණම් සලකුණ","D,B,2","s",4,"slow"],["මාරයාගේ ග්‍රහණය","F,F,1","d",16]]],
 ["Kabara Yakini","#3a7a4a",95,3.3,1,"වේගවත් සටන්කාරිය",["කබර ගිලීම","කොරපොතු කුණාටුව"],[["විෂ දත","D,F,1","p",8,"poison"],["කබර කැරකුම","B,F,4","r",12],["කොරපොතු ආවරණය","D,D,R","h"]]],
-["Mayakari Yakini","#5a2a6a",90,2.6,1.15,"අඳුරු මායාකාරිය",["ආත්ම උරාබීම","මායා සිරගෙය"],[["කොළ ගිනි","D,F,1","p",10],["මායා දම්වැල","B,F,1","s",3,"stun"],["සෙවනැලි ගමන","D,U","t"]]]];
+["Mayakari Yakini","#5a2a6a",90,2.6,1.15,"අඳුරු මායාකාරිය",["ආත්ම උරාබීම","මායා සිරගෙය"],[["කොළ ගිනි","D,F,1","p",10],["මායා දම්වැල","B,F,1","s",3,"stun"],["සෙවනැලි ගමන","D,U","t"]]],
+["Sema Demon", "#6a1a1a", 125, 2.2, 1.2, "අඳුරු රණශූරයා", ["රකුසු ගිනි", "අඳුරු හිරගෙය"], [["අඳුරු ගිනි", "D,F,1", "p", 10], ["රකුසු පහර", "F,F,2", "r", 13], ["කෝප ගර්ජනාව", "D,D,R", "b"]]],
+["Biped Robot", "#7a7a8a", 135, 1.8, 1.25, "යකඩ යන්ත්‍රය", ["ලේසර් කැපුම", "යන්ත්‍ර තලාගැනීම"], [["ලේසර් කිරණය", "D,F,1", "p", 12], ["රොකට් දිවීම", "F,F,4", "r", 14], ["බල ආරෝපණය", "D,D,R", "b"]]]];
 // arenas: [name, night sky colour, scenery, ground tint, particles (embers | fireflies), backdrop image in assets/arenas/, image row (0=top..1=bottom) where the fighters' feet stand]
 const ARENAS=[["එල්ල තේ වතු","#111a24",["hills","tea","palm"],"#7d6a4c","fly","Tea Estate",0.78],["සීගිරි පාමුල","#141c2a",["sigiriya","pond","palm"],"#b8a088","fly","Sigiriya",0.74],
  ["කුඹුරු යාය","#0f1a17",["paddy","palm","hut"],"#86a060","fly","Paddy Field",0.71],["දකුණු වෙරළ","#0d1828",["ocean","palmlean","boat"],"#e2d2aa","fly","Beach",0.72],
@@ -226,7 +228,7 @@ function hurt(t,dmg,st,s){if(t.inv>0)return;
  sfx("hit",dmg,bl);if(!bl&&dmg>=10&&Math.random()<.6)sfx("growl",voice(t),.35);sparks(X(t.x),Y(t.y)+1.15,bl?8:18,!bl);t.hp-=dmg*(s.buff>0?1.5:1)*s.d[4];t.meter=Math.min(100,t.meter+dmg*2);t.flash=6;
  if(!bl){t.hs=Math.min(30,12+dmg|0);t.vx=s.face*(1.6+dmg*.36);hitStop=Math.max(hitStop,Math.min(11,1+dmg/2|0))}
  else{t.hs=Math.max(t.hs||0,7);t.vx=s.face*1.8;hitStop=Math.max(hitStop,3)}
- if(t.x<=34||t.x>=766){s.vx=-s.face*(bl?2.2:3);s.hs=Math.max(s.hs||0,4)}  // cornered defender: the attacker takes the pushbackshake=Math.min(.25,dmg*.012);const an=s.atk?.an||"";t.hr=/uppercut|headbutt/.test(an)?"upface":/kick|crescent|martelo/.test(an)?"hitbody":rnd(["hit","hitreact","takepunch"]);
+ if(t.x<=34||t.x>=766){s.vx=-s.face*(bl?2.2:3);s.hs=Math.max(s.hs||0,4)}  // cornered defender: the attacker takes the pushbackshake=Math.min(.25,dmg*.012);const an=s.atk?.an||"";t.hr=/uppercut|upper|headbutt/.test(an)?"upface":/kick|crescent|martelo/.test(an)?"hitbody":rnd(["hit","hitreact","takepunch"]);
  if(!bl&&t.hp>0&&(dmg>=14||s.atk?.kd||low))knock(t,s);
  if(st=="stun")t.stun=50;if(st=="poison")t.pois=180;if(st=="slow")t.slow=240;if(st=="rev")t.rev=240;if(st=="sil")t.sil=180}
 function dodge(f){if(f.roll>0||f.stun>0||f.cd>0||f.kd>0||f.y<GY||f.hp<=0)return;f.dg=34;f.cd=34;f.inv=26;f.atk=null;f.pend=null;f.vx=0;f.cr=false;sfx("swing",false,0)}
@@ -239,9 +241,9 @@ const TS={punch:1.5,punch2:1.5,kick:1.4,kick2:1.4,fire:1.5,cast:1.6,roll:1.8},RE
 // "Falling To Roll" clip: 0.25s dive start .. 1.5s back on feet; squeeze that span into the ROLL_F-frame dodge
 const ROLL_F=30,ROLL_IN=.25,ROLL_OUT=1.5,rollTS=()=>(Math.min(ROLL_OUT,ANIM.clips.roll?.duration??ROLL_OUT)-ROLL_IN)/(ROLL_F/60);
 // clips start WIND seconds before their impact, skipping slow mocap lead-ins
-const IMP={sthrow:2.3,sthrow2:4.1,flipkick:1.02,backflip:2.9,cast2:5.7,uppercut:1.75};  // impact times read from the clip measurements
-const WIND={punch:.3,punch2:.36,kick:.42,kick2:.5,fire:.6,cast:.5,grab:.45,fkick:.35,knee:.55,sthrow:2.3,dkick:.55,slide:.3,headbutt:.4,crescent:.5,kicking:.4,flipkick:.55,mpunch:.35,martelo:.35,quad:.3,stab:.4,uppercut:.6,backflip:2.9,sthrow2:1.6,cast2:1.4};
-Object.assign(TS,{airkick:1.1,airpunch:1.1,grab:1.8,fkick:1.4,knee:1.5,sthrow:1.6,dkick:1.4,slide:1.3,headbutt:1.5,crescent:1.5,kicking:1.4,flipkick:1.4,mpunch:1.4,roar:1.4,martelo:1.3,quad:1.5,stab:1.5,uppercut:1.5,backflip:1.5,sthrow2:1.6,cast2:1.6,dodge:1.6});
+const IMP={upper:.55,hurricane:.39,sthrow:2.3,sthrow2:4.1,flipkick:1.02,backflip:2.9,cast2:5.7,uppercut:1.75};  // impact times read from the clip measurements
+const WIND={punch:.3,punch2:.36,kick:.42,kick2:.5,fire:.6,cast:.5,grab:.45,fkick:.35,knee:.55,sthrow:2.3,dkick:.55,slide:.3,headbutt:.4,crescent:.5,kicking:.4,flipkick:.55,lpunch:.3,upper:.4,hurricane:.35,martelo:.35,quad:.3,stab:.4,uppercut:.6,backflip:2.9,sthrow2:1.6,cast2:1.4};
+Object.assign(TS,{airkick:1.1,airpunch:1.1,grab:1.8,fkick:1.4,knee:1.5,sthrow:1.6,dkick:1.4,slide:1.3,headbutt:1.5,crescent:1.5,kicking:1.4,flipkick:1.4,lpunch:1.4,upper:1.5,hurricane:1.3,bike:1.2,roar:1.4,martelo:1.3,quad:1.5,stab:1.5,uppercut:1.5,backflip:1.5,sthrow2:1.6,cast2:1.6,dodge:1.6});
 // knockdown: "Knocked Out" falls between 1.3s and 3.2s, "Getting Up" is upright by 1.8s
 const KN_IN=1.3,KN_END=3.2,KN_TS=2.2,GU_END=1.8,GU_TS=2.2,KD_F=Math.round((KN_END-KN_IN)/KN_TS*60),KU_F=Math.round(GU_END/GU_TS*60);
 // knockdown falls: [clip start, on-ground time, speed]; then "Getting Up"
@@ -256,19 +258,19 @@ function use(f,o,m){const[,,ty,dmg,st]=m;f.cd=30;sfx("growl",voice(f),.45);if(!"
  if(ty=="p")later(f,"fire",()=>P.push({x:f.x,y:f.y-60,vx:f.face*7,dmg,st,f,r:10}));
  else if(ty=="s")later(f,"fire",()=>P.push({x:f.x+f.face*30,y:f.y-60,vx:f.face*13,dmg:dmg||3,st,f,r:7,bolt:1}));
  else if(ty=="r"){melee(f,f.i%2?"knee":"fkick",{dmg,reach:70,st});f.atk.win=10;f.dash=f.atk.hitAt+6;f.vx=f.face*7}
- else if(ty=="a")melee(f,"kick2",{dmg,reach:130,st,aoe:1});
+ else if(ty=="a"){melee(f,"hurricane",{dmg,reach:110,st,aoe:1});f.atk.win=30;f.dash=f.atk.hitAt+18;f.vx=f.face*3.2}
  else if(ty=="d")melee(f,"grab",{dmg,reach:90,st,heal:1,kd:1,rec:34});
  else{f.fx="cast";f.nb=30;const hx=X(f.x),hy=Y(f.y);
   if(ty=="t"){sparks(hx,hy+1,70,"dark",1.8);f.x=Math.max(30,Math.min(770,o.x+(f.x<o.x?1:-1)*(minSep(f,o)+12)));f.face=-f.face;sparks(X(f.x),Y(f.y)+1,70,"dark",1.8);sfx("cast")}
   else if(ty=="b"){f.buff=300;sparks(hx,hy+.4,90,true,1.4);sparks(hx,hy+1.4,60,false,1.2)}
   else if(ty=="h"){f.inv=60;for(let j=0;j<12;j++)sparks(hx+Math.cos(j/12*6.28)*.6,hy+1.1+Math.sin(j/12*6.28)*.9,8,"gold",.6)}}}
-const STYLE={classic:["punch","punch2","kick","kick2"],brute:["mpunch","headbutt","kick","crescent"],agile:["quad","uppercut","kicking","flipkick"],blade:["quad","stab","kick","martelo"]};
-const STY=["brute","agile","blade","classic","agile","blade","brute","agile","classic","brute","classic","brute","agile","classic","agile","agile"];
+const STYLE={classic:["punch","punch2","kick","kick2"],brute:["lpunch","upper","kick","crescent"],agile:["quad","uppercut","kicking","flipkick"],blade:["quad","stab","kick","martelo"]};
+const STY=["brute","agile","blade","classic","agile","blade","brute","agile","classic","brute","classic","brute","agile","classic","agile","agile","brute","brute"];
 function basic(f,b){const an=STYLE[STY[f.i]||"classic"][b-1],close=an=="headbutt";melee(f,an,{dmg:b<3?6:8,reach:close?45:b<3?55:70,over:an=="flipkick"})}
 function slide(f){f.cr=false;melee(f,"slide",{dmg:9,reach:80,low:1});f.atk.win=14;f.dash=f.atk.hitAt+10;f.vx=f.face*6;sfx("swing",true,0)}
 function dropKick(f){melee(f,"dkick",{dmg:11,reach:85,kd:1,rec:30});f.dash=f.atk.hitAt;f.vx=f.face*4}
 function sup(f){if(f.meter<100||f.hs>0||f.kd>0)return;f.meter=0;sfx("growl",voice(f),.8);later(f,"fire",()=>P.push({x:f.x,y:f.y-60,vx:f.face*9,dmg:28,f,r:28}))}
-function airAtk(f,b){if(f.airUsed||f.atk||f.hs>0)return;f.airUsed=1;const kick=b>2,an=kick?"airkick":"airpunch";
+function airAtk(f,b){if(f.airUsed||f.atk||f.hs>0)return;f.airUsed=1;const kick=b>2,an=b==4?"bike":kick?"airkick":"airpunch";
  f.atk={id:++AID,t:90,t0:90,hitAt:3,win:90,an,ts:TS[an],dmg:kick?9:7,reach:kick?60:50,air:1};sfx("swing",kick,0)}
 function press(b,f=A,o=B,kk=k){if(f.stun>0||f.kd>0||f.hs>0)return;if(f.y<GY-10&&b!="R")return airAtk(f,+b);if(f.cd>0)return;
  const now=performance.now(),toks=f.buf.filter(t=>now-t[1]<700).map(t=>t[0]);
@@ -530,7 +532,9 @@ const LOOK=[
 [{w:.95},"beak wings crown2 cobrabeak",[["Bird Demon","#2a6ab0","#c03020","#ffd040"],["Flower Bird","#e04a8a","#ffd040","#ffffff","flowers"],["Peacock","#1a5a8a","#106a50","#20c0a0","peacock -wings"]]],
 [{},"tiers cyleyes tongue",[["Demon of Death","#7a3a2a","#2a0a0a","#d4a020"],["Flame Skull","#c03010","#3a0a00","#ff8020","flames"],["Fate Keeper","#3a2a2a","#111111","#a08060","robe book turban -tiers"]]],
 [{},"",[["Kabara","#3a7a4a","#2a1a10","#d4a020"],["Kabara 2","#3a7a4a","#2a1a10","#d4a020"],["Kabara 3","#3a7a4a","#2a1a10","#d4a020"]]],
-[{},"",[["Mayakari","#5a2a6a","#2a1a10","#d4a020"],["Mayakari 2","#5a2a6a","#2a1a10","#d4a020"],["Mayakari 3","#5a2a6a","#2a1a10","#d4a020"]]]];
+[{},"",[["Mayakari","#5a2a6a","#2a1a10","#d4a020"],["Mayakari 2","#5a2a6a","#2a1a10","#d4a020"],["Mayakari 3","#5a2a6a","#2a1a10","#d4a020"]]],
+[{},"",[["Sema Demon","#6a1a1a","#2a1a10","#d4a020"],["Sema Demon 2","#6a1a1a","#2a1a10","#d4a020"],["Sema Demon 3","#6a1a1a","#2a1a10","#d4a020"]]],
+[{},"",[["Biped Robot","#7a7a8a","#2a1a10","#d4a020"],["Biped Robot 2","#7a7a8a","#2a1a10","#d4a020"],["Biped Robot 3","#7a7a8a","#2a1a10","#d4a020"]]]];
 const box=(a,b,c)=>new THREE.BoxGeometry(a,b,c),cyl=(a,b,h,o)=>new THREE.CylinderGeometry(a,b,h,16,1,o),sph=r=>new THREE.SphereGeometry(r,16,12),cap=(r,l)=>new THREE.CapsuleGeometry(r,l,4,12),cone=(r,h)=>new THREE.ConeGeometry(r,h,10);
 const maskCache={};
 function maskGeo(F){const k=(F.has("skull")?"s":"")+(F.has("wide")?"w":"")+(F.has("beak")?"b":"");if(maskCache[k])return maskCache[k];
@@ -579,8 +583,8 @@ function body(i,ci){
  // base model: turn to face +z (left side = +x), normalise to 1.8 m, widen/narrow per build
  const mdl=skClone(real?CH[file]:BASE[F.has("female")||F.has("sari")?"female":"male"].scene),BN={};G.add(mdl);
  mdl.traverse(o=>{if(o.isBone)(BN[o.name.replace(/^mixamorig\d*:?/,"")]||=[]).push(o)});const bone=n=>BN[n]?.[0];  // some files carry duplicate skeletons
- mdl.updateMatrixWorld(true);if(bone("LeftArm").getWorldPosition(V()).x<0)mdl.rotation.y=Math.PI;
- mdl.updateMatrixWorld(true);const wb=real?1:Math.pow(b.w,.6);mdl.scale.setScalar(1.8*Gs/(bone("HeadTop_End")||bone("Head")).getWorldPosition(V()).y);mdl.scale.x*=wb;mdl.scale.z*=wb;mdl.updateMatrixWorld(true);
+ mdl.updateMatrixWorld(true);{const v=bone("LeftArm").getWorldPosition(V()).sub(bone("RightArm").getWorldPosition(V()));mdl.rotation.y=Math.atan2(v.z,v.x)}  // face +z whatever way the file faces
+ mdl.updateMatrixWorld(true);const wb=real?1:Math.pow(b.w,.6);mdl.scale.setScalar(1.8*Gs/(bone("HeadTop_End")?bone("HeadTop_End").getWorldPosition(V()).y:bone("Head").getWorldPosition(V()).y*1.09));mdl.scale.x*=wb;mdl.scale.z*=wb;mdl.updateMatrixWorld(true);
  const tint=new THREE.Color(sk);if(!demon)tint.lerp(new THREE.Color(0xffffff),.7);
  mdl.traverse(o=>{if(!o.isMesh)return;if(/visor/i.test(o.name)){o.visible=false;return}
   o.castShadow=o.receiveShadow=true;o.frustumCulled=false;let mm;
@@ -598,6 +602,12 @@ function body(i,ci){
  const hipY=bone("Hips").getWorldPosition(V()).y/Gs,hip=slot("Hips"),ch=slot("Spine"),hd=slot("Head"),RH=slot("RightHand",-.08,-.02,0),LH=slot("LeftHand",.08,-.02,0);
  // mocap: a hidden Mixamo skeleton plays the clips; each bone's world rotation is copied onto this body (rest-pose corrected)
  const sk0=ANIM.skel.clone();G.add(sk0);sk0.updateMatrixWorld(true);sk0.scale.setScalar(bone("Hips").getWorldPosition(V()).y/sk0.getObjectByName("mixamorigHips").getWorldPosition(V()).y);sk0.updateMatrixWorld(true);
+ // rigs bound in a relaxed pose (3ds Max Biped): bend each limb bone to match the animation skeleton's T-pose first
+ if(TPOSE.has(file)){const q=new THREE.Quaternion(),w=new THREE.Quaternion(),pw=new THREE.Quaternion(),a=V(),b=V(),c=V(),d=V();
+  for(const s of["Left","Right"])for(const[p,ch]of[["Shoulder","Arm"],["Arm","ForeArm"],["ForeArm","Hand"],["UpLeg","Leg"],["Leg","Foot"]]){
+   const tb=bone(s+p),tc=bone(s+ch),sb=sk0.getObjectByName("mixamorig"+s+p),sc=sk0.getObjectByName("mixamorig"+s+ch);if(!tb||!tc||!sb||!sc)continue;
+   sb.getWorldPosition(a);sc.getWorldPosition(b);const ds=b.sub(a).normalize();tb.getWorldPosition(c);tc.getWorldPosition(d);const dt=d.sub(c).normalize();
+   q.setFromUnitVectors(dt,ds);tb.getWorldQuaternion(w);w.premultiply(q);tb.parent.getWorldQuaternion(pw);tb.quaternion.copy(pw.invert().multiply(w));tb.updateMatrixWorld(true)}}
  m.rt=[];sk0.traverse(sb=>{if(sb.isBone)for(const tb of BN[sb.name.replace(/^mixamorig\d*:?/,"")]||[])m.rt.push({s:sb,t:tb,hip:sb.name=="mixamorigHips",off:sb.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(tb.getWorldQuaternion(new THREE.Quaternion())),w:new THREE.Quaternion()})});
  const byT=new Map(m.rt.map(r=>[r.t,r]));for(const r of m.rt)r.pr=byT.get(r.t.parent);
  m.mix=new THREE.AnimationMixer(sk0);m.acts={};for(const k in ANIM.clips)m.acts[k]=m.mix.clipAction(ANIM.clips[k]);play(m,"idle");
@@ -677,7 +687,7 @@ function normalizeHips(){const rest=ANIM.skel.getObjectByName("mixamorigHips").p
  for(const[k,c]of Object.entries(ANIM.clips)){const r=ANIM.rest[k],hp=c.tracks.find(t=>t.name=="mixamorigHips.position");if(!hp||!r||Math.abs(r/rest-1)<.1)continue;
   const s=rest/r,v=hp.values;for(let i=0;i<v.length;i++)v[i]*=s}}
 function measureImpacts(){ANIM.hit={};ANIM.off={};ANIM.reach={};const rest=ANIM.skel.getObjectByName("mixamorigHips").position.y;const sk=ANIM.skel.clone(),mx=new THREE.AnimationMixer(sk),hips=sk.getObjectByName("mixamorigHips"),v=V(),hv=V();
- for(const[k,limbs]of[["punch","Hand"],["punch2","Hand"],["kick","Foot"],["kick2","Foot"],["fire","Hand"],["cast","Hand"],["grab","Hand"],["fkick","Foot"],["knee","Hand"],["sthrow","Hand"],["dkick","Foot"],["slide","Foot"],["flipkick","Foot"],["mpunch","Hand"],["headbutt","Head"],["crescent","Foot"],["kicking","Foot"],["martelo","Foot"],["quad","Hand"],["stab","Hand"],["uppercut","Hand"],["backflip","Hand"],["sthrow2","Hand"],["cast2","Hand"]]){
+ for(const[k,limbs]of[["punch","Hand"],["punch2","Hand"],["kick","Foot"],["kick2","Foot"],["fire","Hand"],["cast","Hand"],["grab","Hand"],["fkick","Foot"],["knee","Hand"],["sthrow","Hand"],["dkick","Foot"],["slide","Foot"],["flipkick","Foot"],["lpunch","Hand"],["upper","Hand"],["hurricane","Foot"],["headbutt","Head"],["crescent","Foot"],["kicking","Foot"],["martelo","Foot"],["quad","Hand"],["stab","Hand"],["uppercut","Hand"],["backflip","Hand"],["sthrow2","Hand"],["cast2","Hand"]]){
   const c=ANIM.clips[k],act=mx.clipAction(c);act.play();const bs=(limbs=="Head"?[""]:["Left","Right"]).map(sd=>sk.getObjectByName("mixamorig"+sd+limbs)).filter(Boolean);let best=-1e9,bt=.3;
   const fwd=[];for(let t=0;t<=c.duration;t+=1/60){mx.setTime(t);sk.updateMatrixWorld(true);hips.getWorldPosition(hv);let f=-1e9;for(const b of bs){b.getWorldPosition(v);f=Math.max(f,v.z-hv.z);const r=v.z-hv.z+(limbs=="Foot"?(v.y-hv.y)*.5:0);if(r>best){best=r;bt=t}}fwd.push(f)}
   act.stop();ANIM.hit[k]=IMP[k]??bt;ANIM.off[k]=Math.max(0,ANIM.hit[k]-WIND[k]);ANIM.reach[k]=Math.max(.15,fwd[Math.min(fwd.length-1,Math.round(ANIM.hit[k]*60))]/rest)}}  // shoulder throw: impact is the landing slam
@@ -687,7 +697,7 @@ const ANIM={clips:{},rest:{}},AF={idle:"Fighting Idle",walk:"Standing Walk Forwa
  flydeath:"Flying Back Death",knee:"Flying Knee Punch Combo",sthrow:"Flying Shoulder Throw",hurt:"Getting Hit",legs:"Hit On Legs",headfall:"Hit To Head",
  hitreact:"Hit Reaction",dkick:"Drop Kick",froll:"Quick Roll To Run",froll2:"Sprinting Forward Roll",crouch:"Standing To Crouched",fall:"Falling Idle",sneak:"Sneak Walk",slide:"Running Slide",
  backflip:"Back Flip To Uppercut",cast2:"Casting Spell",dodge:"Dodging",idle2:"Fight Idle",headbutt:"Headbutt",crescent:"Inside Crescent Kick",jump2:"Jumping",
- kicking:"Kicking",martelo:"Martelo 2",flipkick:"Flip Kick",mpunch:"Mutant Punch",roar:"Mutant Roaring",quad:"Quad Punch",upface:"Receive Uppercut To The Face",
+ kicking:"Kicking",martelo:"Martelo 2",flipkick:"Flip Kick",lpunch:"Left Hand Punching",upper:"Uppercut",bike:"Flying Bicycle Kick",hurricane:"Hurricane Kick",roar:"Mutant Roaring",quad:"Quad Punch",upface:"Receive Uppercut To The Face",
  sthrow2:"Shoulder Throw, Aggressor",stab:"Stabbing",uppercut:"Surprise Uppercut",sweepfall:"Sweep Fall",takepunch:"Taking Punch"};
 function cleanClip(c,k){c.name=k;if(k=="crouch"){for(const t of c.tracks)t.trim(0,.57);c.duration=.57}  // clip loops back to standing on its last key
  c.tracks=c.tracks.filter(t=>t.name.endsWith(".quaternion")||t.name=="mixamorigHips.position");
@@ -727,9 +737,10 @@ let prev,pv=0;async function preview(){const t=++pv,ld=$("#sLoad");ld.classList.
  let m;try{m=body(sel,selC)}catch(e){console.error("fighter build failed",sel,selC,e);return}
  if(prev)drop(prev);prev=m;prev.root.position.set(-1.6,0,0);scene.add(prev.root)}
 // Mixamo characters per fighter (models/characters/*.fbx); costumes that turn human use the base human body
-const CHAR=["Mutant","Parasite L Starkie","Vampire A Lusth","Warzombie F Pedroso","goblin_d_shareyko","Yaku J Ignite","Pumpkinhulk L Shaw","Peasant Girl","Survivor A Lusth","Warrok W Kurniawan","Demon T Wiezzorek","Maw J Laygo","Mremireh O Desbiens","Skeletonzombie T Avelange","Ch04_nonPBR","Nightshade J Friedrich"];
+const CHAR=["Mutant","Parasite L Starkie","Vampire A Lusth","Warzombie F Pedroso","goblin_d_shareyko","Yaku J Ignite","Pumpkinhulk L Shaw","Peasant Girl","Survivor A Lusth","Warrok W Kurniawan","Demon T Wiezzorek","Maw J Laygo","Mremireh O Desbiens","Skeletonzombie T Avelange","Ch04_nonPBR","Nightshade J Friedrich","Sema Demon","Biped Robot"];
 const SKIP=new Set("buffalo skull cape armor ivory garland cobrawrap belly bigbelly sari coins pox embers flowers bear monkey beak cobrabeak tusks bigtusks tongue firemouth ears hair wild curly arms4 arms10".split(" ")),CH={},CHP={};
 const charFor=i=>CHAR[i];
+const TPOSE=new Set(["Biped Robot","Sema Demon"]);  // rigs not bound in a T-pose
 // characters are meshopt-compressed GLB (converted from the Mixamo FBX downloads)
 const charLoader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 function ready(i,ci){const f=charFor(i,ci);if(!f)return;return CHP[f]||=charLoader.loadAsync(encodeURI(`models/characters/${f}.glb`)).then(g=>CH[f]=g.scene,e=>console.warn("character missing:",f,e))}
@@ -871,7 +882,7 @@ const SFX={
   bp.type="bandpass";bp.frequency.value=620*p;bp.Q.value=1.4;o.connect(vca);vca.connect(bp);bp.connect(env(t,.03,len,.55,AU.fx,1));noise(t,len,.1,"bandpass",900*p,500*p,1.5);o.start(t);am.start(t);o.stop(t+len+.05);am.stop(t+len+.05)},
  laugh(p=1){const t=now();for(let i=0;i<5;i++){const s=t+i*.17;tone(s,"sawtooth",(175-i*12)*p,(150-i*12)*p,.13,.11,AU.fx,1,.01);noise(s,.12,.07,"bandpass",1000*p,800*p,3)}}};
 const sfx=(n,...a)=>{netEv("sfx",n,...a);if(AU.c&&AU.on)try{SFX[n](...a)}catch(e){}};
-const voice=f=>f.i==7?2.1:f.i>=14?1.75:1.3-Math.min(.5,(f.max-85)/130);   // demon voice pitch: heavies deeper, the maiden shrieks
+const voice=f=>f.i==7?2.1:f.i==14||f.i==15?1.75:1.3-Math.min(.5,(f.max-85)/130);   // demon voice pitch: heavies deeper, the maiden shrieks
 function setSound(on){AU.on=on;try{localStorage.setItem("yk-sound",on?"1":"0")}catch(e){}if(AU.c)AU.mst.gain.setTargetAtTime(on?.9:0,now(),.05);
  $$("[data-a=sound]").forEach(b=>b.textContent="ශබ්දය: "+(on?"සක්‍රීය":"අක්‍රීය"))}
 addEventListener("pointerdown",auInit);
@@ -957,7 +968,7 @@ function netMsg(m){
 
 // ---------- UI (HTML overlay) ----------
 const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
-const SIN=["ගල් යකා","ලේ යකා","කඩු කුමාරයා","මළ හේවයා","හොර යකා","පච්ච යකා","වට්ටක්කා යකා","ගැමි කුමාරි","බඩගිනි යකා","අසුර රජා","නිල් යකා","අං යකා","කොළ යකා","සොහොන් යකා","කබර යකිනී","මායාකාරී යකිනී"];
+const SIN=["ගල් යකා","ලේ යකා","කඩු කුමාරයා","මළ හේවයා","හොර යකා","පච්ච යකා","වට්ටක්කා යකා","ගැමි කුමාරි","බඩගිනි යකා","අසුර රජා","නිල් යකා","අං යකා","කොළ යකා","සොහොන් යකා","කබර යකිනී","මායාකාරී යකිනී","සේමා යකා","යකඩ රොබෝ"];
 const KEYCAP={F:"→",B:"←",D:"↓",U:"↑","1":"J","2":"I","3":"K","4":"L",R:"Space"},kb=s=>s.split(",").map(t=>`<kbd${"FBDU".includes(t)?" class=ar":""}>${KEYCAP[t]}</kbd>`).join("");
 const ST={stun:"ක්ලාන්තයි",pois:"විෂ වී ඇත",slow:"මන්දගාමී",rev:"ව්‍යාකූලයි",sil:"බැඳී ඇත",buff:"කෝපයෙන්",inv:"ආරක්ෂිතයි"};
 let baseId="boot",ovId=null,ctlBack=null;
@@ -1033,7 +1044,7 @@ function loop(){
 THREE.DefaultLoadingManager.onProgress=(u,l,t)=>{$("#bootBar").style.width=l/t*100+"%"};
 Promise.all([...["male","female"].map(n=>new GLTFLoader().loadAsync("models/"+n+".glb")),new RGBELoader().loadAsync("assets/night.hdr"),
  ...Object.entries(AF).map(([k,n])=>new FBXLoader().loadAsync(encodeURI(`models/anims/${n}.fbx`)).then(o=>{ANIM.clips[k]=cleanClip(o.animations[0],k);ANIM.rest[k]=o.getObjectByName("mixamorigHips")?.position.y;if(k=="idle")ANIM.skel=o}))]).then(([a,b,hdr])=>{BASE.male=a;BASE.female=b;normalizeHips();measureImpacts();
- for(const[k,src,start]of[["airkick","fkick",.3],["airpunch","knee",1.12]]){const c=ANIM.clips[src].clone();c.name=k;const hp=c.tracks.find(t=>t.name=="mixamorigHips.position");
+ for(const[k,src,start]of[["airkick","fkick",.3],["airpunch","knee",1.12],["bike","bike",0]]){const c=ANIM.clips[src].clone();c.name=k;const hp=c.tracks.find(t=>t.name=="mixamorigHips.position");
   if(hp){const v=hp.values,y0=v[1];for(let i=1;i<v.length;i+=3)v[i]=y0}ANIM.clips[k]=c;ANIM.off[k]=start}ARENAS.forEach(a=>a[5]&&bgTex(a[5]));
  setSound(AU.on);nameLabel();envTex=pmrem.fromEquirectangular(hdr).texture;scene.environment=envTex;hdr.dispose();S="title";base("title");updSelect();preview();buildArena(ARENAS[0]);loop()})
  .catch(e=>{console.error(e);$("#bootTxt").textContent="ක්‍රීඩා ගොනු පූරණය කළ නොහැක — මෙම ෆෝල්ඩරය HTTP සේවාදායකයක් හරහා විවෘත කරන්න (python3 -m http.server)"});
