@@ -27,7 +27,7 @@ Built entirely with standard web standards, the game requires **zero downloads, 
 - 🥁 **Procedural Sri Lankan Ritual Audio:** Real-time synthesis of traditional percussion instruments (*Yak Bera* drum sounds: *Thom*, *Tha*, *Thei*, *Kadittu*, *Mandra*), *Thalam* cymbals, and the microtonal *Horanewa* double-reed horn using the Web Audio API.
 - 🩸 **Ritual Finishers (*Bili* / Fatalities):** Win the final round to execute traditional ritual sacrifices: *Bili* (බිලි), *Maha Bili* (මහා බිලි), or *Shanthiya* (ශාන්තිය - mercy).
 - 📱 **Mobile & Touch Support:** Automatic virtual touch D-pad and responsive action buttons for touchscreen devices.
-- 🇱🇰 **Bespoke Sinhala Typography:** UI rendered with authentic Sinhala typefaces (*Gemunu Libre* & *Yaldevi* by Mooniak foundry).
+- 🇱🇰 **Bilingual Support (සිංහල & English):** Full localization and in-game toggle between authentic Sinhala and English, rendered with beautiful Mooniak typefaces (*Gemunu Libre* & *Yaldevi*).
 
 ---
 
