@@ -53,7 +53,7 @@ kbd.ar{font-size:1.15cqw}
 .cmid{text-align:center}.cmid small{display:block;font-size:.65cqw;letter-spacing:.32em;text-transform:uppercase;color:#a89c86;margin-bottom:.2cqw}.cmid span{font:700 1.1cqw var(--fd)}
 .info h4{margin:0 0 .4cqw;font-size:.75cqw;letter-spacing:.3em;text-transform:uppercase;color:var(--g);display:flex;justify-content:space-between}.info h4 small{letter-spacing:.05em;color:#8d826f;text-transform:none;font-weight:400}
 .moves{list-style:none;margin:0;padding:0}.moves li{display:flex;justify-content:space-between;align-items:center;padding:.4cqw 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:.9cqw}
-.face{display:flex;gap:.4cqw;margin-top:.8cqw}.face button{all:unset;cursor:pointer;flex:1;text-align:center;padding:.45cqw;font:600 1cqw var(--fb);border:1px solid var(--ln);background:rgba(0,0,0,.35)}.face button:hover{border-color:var(--g)}#faceDel{flex:0 0 2.4cqw}#faceDel:not(.on){display:none}
+.face{display:flex;gap:.4cqw;margin:.8cqw 0 .7cqw}.face button{all:unset;cursor:pointer;flex:1;text-align:center;padding:.45cqw;font:600 1cqw var(--fb);border:1px solid var(--ln);background:rgba(0,0,0,.35)}.face button:hover{border-color:var(--g)}#faceDel,#oppDel{flex:0 0 1.8cqw}#faceDel:not(.on),#oppDel:not(.on){display:none}.face img{height:1.4cqw;width:1.4cqw;border-radius:50%;vertical-align:middle;margin-right:.4cqw;border:1px solid var(--g)}
 .go{all:unset;cursor:pointer;display:block;width:100%;margin-top:1.3cqw;text-align:center;padding:.75cqw;font-size:1.4cqw;font-weight:700;letter-spacing:.3em;text-transform:uppercase;background:linear-gradient(#d72a32,#8c1118);border:1px solid #ff7b6b}
 .go:hover{filter:brightness(1.15)}.go kbd{margin-left:.8cqw}
 #sLoad{position:absolute;left:14cqw;top:48%;font-size:.8cqw;letter-spacing:.35em;text-transform:uppercase;color:var(--g);opacity:0;transition:opacity .2s}#sLoad.on{opacity:1;animation:pulse 1s infinite alternate}
@@ -125,7 +125,7 @@ kbd.ar{font-size:1.15cqw}
 <div id=select class=scr><div class=vign></div><div class=stitle>ඔබේ සටන්කරුවා තෝරන්න<small>වට තුනෙන් දෙකක් · පරිගණකයට එරෙහිව</small></div><div id=sLoad>කැඳවමින්…</div>
  <aside class=info><div class=si id=sSin></div><h2 id=sName></h2><div class=role id=sRole></div><div id=sStats></div>
   <div class=costume><button id=cPrev aria-label="පෙර ඇඳුම">‹</button><div class=cmid><small>ඇඳුම <b id=cIdx></b></small><span id=cName></span></div><button id=cNext aria-label="ඊළඟ ඇඳුම">›</button></div>
-  <div class=face><button id=faceBtn></button><button id=faceDel aria-label="remove">✕</button><input type=file id=faceIn accept="image/*" hidden></div>
+  <div class=face><button id=faceBtn></button><button id=faceDel aria-label="remove">✕</button><button id=oppBtn></button><button id=oppDel aria-label="remove">✕</button><input type=file id=faceIn accept="image/*" hidden></div>
   <h4>විශේෂ ප්‍රහාර <small>→ = ප්‍රතිවාදියා දෙසට</small></h4><ul class=moves id=sMoves></ul>
   <button class=go id=goBtn>සටනට<kbd>Enter</kbd></button></aside>
  <div class=roster id=roster></div>
@@ -285,7 +285,7 @@ async function start(){if(NET)return netPick();if(busy)return;busy=1;sfx("roll")
  S="vs";base("vs");$("#vs .vsSide.l small").textContent=PNAME||TXT[LANG].player;$("#vs .vsSide.r small").textContent=TXT[LANG].cpu;for(const[p,i,c]of[["A",sel,selC],["B",bi,bc]]){$("#vs"+p).textContent=fighterName(i);$("#vs"+p+"s").textContent=fighterSub(i);$("#vs"+p+"c").textContent=cosName(i,c)}
  const t0=performance.now();await Promise.all([ready(sel,selC),ready(bi,bc)]);await new Promise(r=>setTimeout(r,Math.max(0,1600-(performance.now()-t0))));
  A=mk(sel,200,1,1);B=mk(bi,600,-1,0);A.c=selC;B.c=bc;A.pn=PNAME;B.pn=TXT[LANG].cpu;busy=0;
- for(const f of[A,B]){f.m=body(f.i,f.c);scene.add(f.m.root)}addFace(A.m,FACE);if(prev){scene.remove(prev.root);faceUpd(prev)}roundNo=0;base("hud");hudInit();round()}
+ for(const f of[A,B]){f.m=body(f.i,f.c);scene.add(f.m.root)}addFace(A.m,FACE);addFace(B.m,FACE2);if(prev){scene.remove(prev.root);faceUpd(prev)}roundNo=0;base("hud");hudInit();round()}
 function toSelect(){paused=false;$("#sLoad").classList.remove("on");$("#sLoad").textContent=TXT[LANG].summoning;if(NET)NET.picks={};AU.mode="menu";if(AU.c)AU.mus.gain.setTargetAtTime(.32,now(),.1);overlay(null);banner("");if(A){for(const f of[A,B])drop(f.m);A=B=null;P=[]}S="select";base("select");updSelect();
  if(prev)scene.add(prev.root);else preview();buildArena(ARENAS[0])}
 function toTitle(){toSelect();S="title";base("title")}
@@ -339,7 +339,7 @@ addEventListener("keydown",e=>{const K=e.key.toLowerCase();if(e.target.tagName==
  if(K=="escape"){if(ovId=="controls"||ovId=="credits")return act("back");if(ovId=="pause")return setPause(false);if(["intro","fight","between","finish"].includes(S)&&!ovId)return setPause(true);if(S=="select"){sfx("back");return toTitle()}return}
  const m=activeMenu();
  if(m&&(ovId||S=="title")){const i=+m.dataset.i||0;if(K=="arrowup"||K=="w"){menuSel(m,i-1);sfx("tick")}if(K=="arrowdown"||K=="s"){menuSel(m,i+1);sfx("tick")}if(K=="enter"||K==" ")act(m.children[+m.dataset.i||0].dataset.a);return}
- if(S=="select"&&K=="f"&&!ovId){$("#faceIn").click();return}if(S=="select"){const o=sel,oc=selC;if(K=="arrowright"||K=="d")sel=(sel+1)%R.length;if(K=="arrowleft"||K=="a")sel=(sel+R.length-1)%R.length;if(o!=sel)selC=0;if(K=="c")selC=(selC+1)%3;
+ if(S=="select"&&(K=="f"||K=="g")&&!ovId){pickFace(K=="f"?"me":"opp");return}if(S=="select"){const o=sel,oc=selC;if(K=="arrowright"||K=="d")sel=(sel+1)%R.length;if(K=="arrowleft"||K=="a")sel=(sel+R.length-1)%R.length;if(o!=sel)selC=0;if(K=="c")selC=(selC+1)%3;
   if(o!=sel||oc!=selC){updSelect();preview();sfx("tick")}if(K=="enter")start();return}
  if(paused)return;
  if(NET?.role=="guest"&&A){if(FIGHTS.includes(S))netSend({t:"k",K,d:1});return}
@@ -957,7 +957,7 @@ async function netMatch(h,g,hn,gn,hf,gf){hn=hn||(LANG=="en"?"Player 1":"ක්�
  for(const[p,[i,c],who]of[["A",h,hn],["B",g,gn]]){$("#vs"+p).textContent=fighterName(i);$("#vs"+p+"s").textContent=fighterSub(i);$("#vs"+p+"c").textContent=cosName(i,c);$(`#vs .vsSide.${p=="A"?"l":"r"} small`).textContent=who}
  await Promise.all([ready(...h),ready(...g)]);
  A=mk(h[0],200,1,1);B=mk(g[0],600,-1,1);A.c=h[1];B.c=g[1];A.pn=hn;B.pn=gn;B.kb=RK;for(const x in RK)RK[x]=0;
- for(const f of[A,B]){f.m=body(f.i,f.c);scene.add(f.m.root)}addFace(A.m,hf);addFace(B.m,gf);if(prev){scene.remove(prev.root);faceUpd(prev)}roundNo=0;base("hud");hudInit();
+ for(const f of[A,B]){f.m=body(f.i,f.c);scene.add(f.m.root)}{const host=NET?.role=="host";addFace(A.m,hf||(host?"":FACE2));addFace(B.m,gf||(host?FACE2:""))}if(prev){scene.remove(prev.root);faceUpd(prev)}roundNo=0;base("hud");hudInit();
  if(NET.role=="host"){if(!NET.gl)await new Promise(r=>NET.onLoaded=r);NET.gl=false;NET.onLoaded=null;round()}else netSend({t:"loaded"})}
 const FSYNC=["x","y","vx","vy","face","hp","meter","wins","win","blk","cr","roll","rk","dg","kd","kd0","kdk","stun","flash","hr","cin","daze","dk","inv","buff","pois","slow","rev","sil","shT"];
 let PID=0;
@@ -1004,7 +1004,7 @@ const TXT={
   langMenu:"Language: Sinhala",tagline:"ලංකාදීපයේ යක්ෂයෝ",boot:"යක්ෂයින් කැඳවමින්…",bootErr:"ක්‍රීඩා ගොනු පූරණය කළ නොහැක — මෙම ෆෝල්ඩරය HTTP සේවාදායකයක් හරහා විවෘත කරන්න (python3 -m http.server)",
   play:"සටන අරඹන්න",lan:"මිතුරා සමඟ සටන",controls:"පාලන යතුරු",credits:"ගෞරව නාමාවලිය",diff:"දුෂ්කරතාව: ",sound:"ශබ්දය: ",soundOn:"සක්‍රීය",soundOff:"අක්‍රීය",name:"නම: ",noName:"—",
   hintTitle:["තෝරන්න","තහවුරු කරන්න"],selTitle:"ඔබේ සටන්කරුවා තෝරන්න",selSub:"වට තුනෙන් දෙකක් · පරිගණකයට එරෙහිව",selSubLan:"වට තුනෙන් දෙකක් · මිතුරාට එරෙහිව",summoning:"කැඳවමින්…",
-  costume:"ඇඳුම",prevCostume:"පෙර ඇඳුම",nextCostume:"ඊළඟ ඇඳුම",specialMoves:"විශේෂ ප්‍රහාර",specialDir:"→ = ප්‍රතිවාදියා දෙසට",fightBtn:"සටනට",faceAdd:"📷 ඔබේ මුහුණ එක් කරන්න (F)",faceOn:"📷 මුහුණ වෙනස් කරන්න (F)",
+  costume:"ඇඳුම",prevCostume:"පෙර ඇඳුම",nextCostume:"ඊළඟ ඇඳුම",specialMoves:"විශේෂ ප්‍රහාර",specialDir:"→ = ප්‍රතිවාදියා දෙසට",fightBtn:"සටනට",faceAdd:"📷 මගේ මුහුණ (F)",faceOn:"මගේ මුහුණ (F)",oppAdd:"👹 ප්‍රතිවාදියා (G)",oppOn:"ප්‍රතිවාදියා (G)",
   hintSelect:["සටන්කරුවා","ඇඳුම","සටනට","ආපසු"],player:"ක්‍රීඩකයා",cpu:"පරිගණකය",vsLoad:"සටන් බිම සූදානම් වෙමින්…",meter:"තොවිල් බලය",meterReady:" · සූදානම් — O ඔබන්න",
   hintHud:["විරාමය","ශබ්දය"],biliPrompt:["බිලි","මහා බිලි","ශාන්තිය"],finishHim:"අවසන් කරන්න!",round:n=>`${n} වන වටය`,finalRound:"අවසාන වටය",fightStart:"සටන!",
   roundWin:n=>`${n} වටය දිනයි`,ko:"බිම වැටුණා!",timeUp:"කාලය අවසන්",shanthiTitle:"ශාන්තිය",shanthiSub:n=>`${n} සමාව දෙයි`,biliTitle:n=>n?"මහා බිලි":"බිලි",
@@ -1028,7 +1028,7 @@ const TXT={
   langMenu:"Language: English",tagline:"Demons of Lanka",boot:"Summoning Demons…",bootErr:"Cannot load game files — please serve this folder via HTTP server (python3 -m http.server)",
   play:"Start Battle",lan:"Versus Friend",controls:"Controls",credits:"Credits",diff:"Difficulty: ",sound:"Sound: ",soundOn:"ON",soundOff:"OFF",name:"Name: ",noName:"—",
   hintTitle:["Select","Confirm"],selTitle:"Choose Your Fighter",selSub:"Best of 3 · Versus CPU",selSubLan:"Best of 3 · Versus Friend",summoning:"Summoning…",
-  costume:"Costume",prevCostume:"Previous Costume",nextCostume:"Next Costume",specialMoves:"Special Moves",specialDir:"→ = Toward Opponent",fightBtn:"FIGHT",faceAdd:"📷 Add your face photo (F)",faceOn:"📷 Change face photo (F)",
+  costume:"Costume",prevCostume:"Previous Costume",nextCostume:"Next Costume",specialMoves:"Special Moves",specialDir:"→ = Toward Opponent",fightBtn:"FIGHT",faceAdd:"📷 My face (F)",faceOn:"My face (F)",oppAdd:"👹 Opponent (G)",oppOn:"Opponent (G)",
   hintSelect:["Fighter","Costume","Fight","Back"],player:"Player 1",cpu:"CPU",vsLoad:"Preparing Battleground…",meter:"Thovil Power",meterReady:" · READY — Press O",
   hintHud:["Pause","Mute"],biliPrompt:["Bili","Maha Bili","Shanthiya"],finishHim:"FINISH HIM!",round:n=>`Round ${n}`,finalRound:"Final Round",fightStart:"FIGHT!",
   roundWin:n=>`${n} Wins the Round`,ko:"KNOCKOUT!",timeUp:"TIME UP!",shanthiTitle:"SHANTHIYA",shanthiSub:n=>`${n} Grants Mercy`,biliTitle:n=>n?"MAHA BILI":"BILI",
@@ -1122,9 +1122,11 @@ function applyLang(){
  const nBack=$("#nameov [data-a=nameback]");if(nBack)nBack.textContent=TXT[LANG].back;
 }
 // player face photo: square-cropped 160 px JPEG, kept on this device, worn as a mask on the player's fighter
-let FACE=(()=>{try{return localStorage.getItem("yk-face")||""}catch(e){return ""}})();const faceTex={};
-function faceUI(){$("#faceBtn").textContent=TXT[LANG][FACE?"faceOn":"faceAdd"];$("#faceDel").classList.toggle("on",!!FACE)}
-function setFace(v){FACE=v;try{v?localStorage.setItem("yk-face",v):localStorage.removeItem("yk-face")}catch(e){}faceUI();preview()}
+const ls=k=>{try{return localStorage.getItem(k)||""}catch(e){return ""}};let FACE=ls("yk-face"),FACE2=ls("yk-face2"),faceSlot="me";const faceTex={};
+function faceUI(){for(const[b,d,v,on,add]of[["#faceBtn","#faceDel",FACE,"faceOn","faceAdd"],["#oppBtn","#oppDel",FACE2,"oppOn","oppAdd"]]){const el=$(b);el.textContent=TXT[LANG][v?on:add];
+  if(v){const i=new Image();i.src=v;el.prepend(i)}$(d).classList.toggle("on",!!v)}}
+function setFace(v,slot=faceSlot){const k=slot=="opp"?"yk-face2":"yk-face";if(slot=="opp")FACE2=v;else FACE=v;try{v?localStorage.setItem(k,v):localStorage.removeItem(k)}catch(e){}faceUI();if(slot=="me")preview()}
+function pickFace(slot){faceSlot=slot;$("#faceIn").click()}
 function loadFace(file){if(!file||!/^image\//.test(file.type))return;const img=new Image();img.onload=()=>{const N=160,c=document.createElement("canvas");c.width=c.height=N;const s=Math.min(img.width,img.height);
  c.getContext("2d").drawImage(img,(img.width-s)/2,Math.max(0,(img.height-s)*.3),s,s,0,0,N,N);URL.revokeObjectURL(img.src);setFace(c.toDataURL("image/jpeg",.82));sfx("ok")};img.src=URL.createObjectURL(file)}
 function addFace(m,url){if(!url||!/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(url))return;  // only our own JPEG data URLs (they also arrive from the network)
@@ -1148,7 +1150,7 @@ function banner(t1,t2="",cls=""){netEv("banner",t1,t2,cls);const b=$("#banner");
 $("#roster").innerHTML=R.map((r,i)=>`<div class=card style="--c:${r[1]}">${fighterName(i)}</div>`).join("");
 $("#roster").onclick=e=>{const c=e.target.closest(".card");if(!c)return;const i=$$(".card").indexOf(c);if(i>=0){auInit();if(sel!=i){sel=i;selC=0;updSelect();preview();sfx("tick")}}};
 $("#roster").ondblclick=e=>{if(e.target.closest(".card"))start()};
-$("#cPrev").onclick=()=>{selC=(selC+2)%3;updSelect();preview();sfx("tick")};$("#cNext").onclick=()=>{selC=(selC+1)%3;updSelect();preview();sfx("tick")};$("#goBtn").onclick=()=>start();$("#faceBtn").onclick=()=>$("#faceIn").click();$("#faceIn").onchange=e=>{loadFace(e.target.files[0]);e.target.value=""};$("#faceDel").onclick=()=>{setFace("");sfx("back")};
+$("#cPrev").onclick=()=>{selC=(selC+2)%3;updSelect();preview();sfx("tick")};$("#cNext").onclick=()=>{selC=(selC+1)%3;updSelect();preview();sfx("tick")};$("#goBtn").onclick=()=>start();$("#faceBtn").onclick=()=>pickFace("me");$("#oppBtn").onclick=()=>pickFace("opp");$("#oppDel").onclick=()=>{setFace("","opp");sfx("back")};$("#faceIn").onchange=e=>{loadFace(e.target.files[0]);e.target.value=""};$("#faceDel").onclick=()=>{setFace("","me");sfx("back")};
 function updSelect(){const r=R[sel];$("#sSin").textContent=fighterSub(sel);$("#sName").textContent=fighterName(sel);$("#sRole").textContent=fighterRole(sel);
  const stLabels=TXT[LANG].stats;
  $("#sStats").innerHTML=[[stLabels[0],r[2]/150],[stLabels[1],r[3]/3.4],[stLabels[2],r[4]/1.3]].map(([n,v])=>`<div class=stat>${n}<i><b style="width:${v*100}%"></b></i></div>`).join("");
